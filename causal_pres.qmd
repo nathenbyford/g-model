@@ -1,10 +1,11 @@
 ---
-title: 'Title'
+title: 'Introduction to G-methods'
+subtitle: 'Dealing with Time-varying Covariates in Causal Inverence'
 date: ''
 format: 
   baylor_theme-revealjs:
-    author: 'Author'
-    footer: 'Author'
+    author: ' '
+    footer: 'Nathen Byford'
 ---
 
 ## Quarto
