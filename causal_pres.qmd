@@ -61,9 +61,11 @@ In the motivating example, A0 is the first treatment, Z1 is the viral load, A1 i
 flowchart LR
   id1("Step1: Obtain the \n empirical parameters")
   id2("Step2: Estimate the \n counterfactual mean")
-  id3("Step3: fit into \n marginal structural model")
+  id3("Step3: Fit into \n marginal structural model")
   id1 --> id2
   id2 --> id3
 ```
 
 The main idea is to use counterfactuals to create an estimation of average effects.
+
+# IP-weighting and Marginal Structural Models
