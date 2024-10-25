@@ -1,0 +1,113 @@
+---
+title: "Interactive Presentation"
+format: 
+  revealjs:
+    theme: default
+    include-in-header:
+      - text: |
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+          <style>
+            .chart-container {
+              position: relative;
+              margin: auto;
+              height: 400px;
+              width: 600px;
+            }
+            .poll-option {
+              display: inline-block;
+              margin: 10px;
+              padding: 15px 30px;
+              background: #007bff;
+              color: white;
+              border-radius: 5px;
+              cursor: pointer;
+            }
+          </style>
+---
+
+## Welcome {background-color="#fff"}
+
+Use your phone to participate!
+
+::: {.qr-code style="position: absolute; bottom: 20px; right: 20px; width: 150px; height: 150px;"}
+![](https://via.placeholder.com/150)
+:::
+
+## Interactive Poll {background-color="#fff"}
+
+What's your favorite programming language?
+
+::: {#poll-container}
+<div id="poll-options">
+  <div class="poll-option" onclick="vote('Python')">Python</div>
+  <div class="poll-option" onclick="vote('JavaScript')">JavaScript</div>
+  <div class="poll-option" onclick="vote('Java')">Java</div>
+  <div class="poll-option" onclick="vote('C++')">C++</div>
+</div>
+
+<div class="chart-container">
+  <canvas id="resultsChart"></canvas>
+</div>
+:::
+
+<script>
+// Initialize the results chart
+window.addEventListener('load', function() {
+    const ctx = document.getElementById('resultsChart').getContext('2d');
+    window.resultsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Python', 'JavaScript', 'Java', 'C++'],
+            datasets: [{
+                label: 'Votes',
+                data: [0, 0, 0, 0],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+});
+
+function vote(option) {
+    // For demonstration, update the chart directly
+    const index = window.resultsChart.data.labels.indexOf(option);
+    window.resultsChart.data.datasets[0].data[index]++;
+    window.resultsChart.update();
+}
+
+/* For real-time multi-user functionality, you would add WebSocket code like this:
+const ws = new WebSocket('wss://your-server.com/ws');
+
+ws.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    updateChart(data);
+};
+
+function updateChart(data) {
+    window.resultsChart.data.datasets[0].data = data;
+    window.resultsChart.update();
+}
+*/
+</script>

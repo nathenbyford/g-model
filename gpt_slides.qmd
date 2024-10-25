@@ -1,0 +1,167 @@
+---
+title: "IP-weighting and Marginal Structural Models (MSMs)"
+author: ""
+date: today
+date-format: long
+format: baylor_theme-revealjs
+footer: "Nathen Byford"
+---
+
+# Introduction
+
+
+## Motivating Example
+
+:::{.def}
+We are interested in the question "What is the average causal effect of smoking cessation on body weight gain?"
+:::
+
+Simple models
+
+- 
+
+
+
+## Transition to IP Weighting
+
+- **G-formula** and **G-computation** focus on modeling the **outcome**.
+- **IP-weighting** provides an alternative approach by modeling the **treatment assignment** rather than the outcome.
+
+
+# Inverse Probability Weighting
+
+
+## Inverse Probability Weighting: Overview
+
+- A method of creating a pseudo-population that uses _weights_ to account for confounding.
+- Each individual is weighted by the inverse of the **probability of receiving the treatment they actually received**.
+
+$$
+\operatorname{Weight} = \frac{1}{Pr(A \mid L)}
+$$
+
+
+
+## IPW: Assumptions
+
+- **No unmeasured confounding**: All confounders must be measured.
+- **Correct specification of the propensity score model**: The model for treatment assignment must be correct.
+- **Positivity**: There must be non-zero probability of receiving each treatment for all levels of confounders.
+- **Consistency**: Observed outcomes must correspond to the treatment actually received.
+- **Stable Unit Treatment Value Assumption (SUTVA)**: There is no interference between individuals (i.e., one person’s treatment does not affect another's outcome).
+
+
+
+## IPW: Rationale
+
+- Goal: Create a **pseudo-population** where treatment assignment is **independent** of confounders.
+- Intuition: If someone with low probability of treatment receives it, they are **upweighted** in the analysis.
+
+
+## IPW: Pros and Cons
+
+- **Advantages:**
+  - More **robust to model misspecification** of the outcome model.
+  - Avoids directly modeling the outcome.
+
+- **Disadvantages:**
+  - Requires correct specification of the **propensity score model**.
+  - **Extreme weights** can lead to instability and inefficiency.
+  - The size of the pseudo-population is twice the size of the study population
+
+
+## IPW: Stabilized weights
+
+Stabilized weights:
+$$\operatorname{SW}_i = \frac{P(A_i)}{P(A_i|L_i)}$$
+
+Key Properties
+
+- Numerator: Marginal probability of treatment
+- Denominator: Conditional probability of treatment
+- Expected value of stabilized weights approximately 1
+
+## IPW: Example
+
+1. **Estimate Propensity Score:**
+   $$
+   \hat{P}(Treatment \mid Confounders)
+   $$
+   Example: Logistic regression model for the probability of treatment.
+
+2. **Calculate Weights:**
+   $$
+   Weight = \frac{1}{\hat{P}(Treatment \mid Confounders)}
+   $$
+
+3. **Weighted Outcome Model:**
+   $$
+   E(Y \mid Treatment) = f(Weighted Data)
+   $$
+
+
+
+
+
+# Marginal Structural Models
+
+
+
+## Marginal Structural Models (MSMs): Overview
+
+- Developed to handle **time-varying treatments** and **confounding**.
+- Combine **IPW** and **structural models** to estimate causal effects.
+- MSMs model the effect of treatment on outcome, weighted by IPW to adjust for confounders.
+
+
+
+## MSMs: Example
+
+1. **Step 1: Calculate Stabilized Weights**
+   $$
+   SW = \frac{P(Treatment)}{P(Treatment \mid Confounders)}
+   $$
+   These weights are used to reduce variance while accounting for confounding.
+
+2. **Step 2: Fit MSM**
+   $$
+   Y = \beta_0 + \beta_1 \times Treatment
+   $$
+   Weighted regression with **stabilized weights**.
+
+
+
+## MSMs: Key Strengths
+
+- **Handles time-varying treatments** and confounders.
+- Suitable for longitudinal data and **dynamic treatment regimes**.
+- Can capture **causal effects** that change over time.
+
+
+
+## Comparing Methods {.smaller}
+
+| Method                 | Key Idea                             | Pros                                         | Cons                                       |
+|------------------------|--------------------------------------|----------------------------------------------|--------------------------------------------|
+| **G-computation**       | Model counterfactual outcomes        | Directly estimates effects                   | Model misspecification is critical         |
+| **IP-weighting**        | Re-weight to balance confounders     | Avoids modeling the outcome                  | Sensitive to extreme weights               |
+| **MSMs**               | Combine IPW with structural models   | Handles time-varying treatments              | Complex to implement, requires weights     |
+
+
+
+## Conclusion
+
+- **G-computation**: Direct modeling of potential outcomes.
+- **IP-weighting**: Uses weights to adjust for confounders.
+- **MSMs**: Combines IP-weighting and models for complex settings.
+- Choosing the right method depends on the context (e.g., time-varying treatments, data structure).
+
+
+
+## References
+
+- Robins, J.M. (1986). "A new approach to causal inference in mortality studies."
+- Hernán, M.A., & Robins, J.M. (2020). *Causal Inference: What If.*
+- VanderWeele, T.J. (2015). *Explanation in Causal Inference: Methods for Mediation and Interaction.*
+- Slide help from chatGPT
+

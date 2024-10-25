@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="causal_pres_files/libs/clipboard/clipboard.min.js"></script>
-<script src="causal_pres_files/libs/quarto-html/tabby.min.js"></script>
-<script src="causal_pres_files/libs/quarto-html/popper.min.js"></script>
-<script src="causal_pres_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="causal_pres_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="causal_pres_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="causal_pres_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="causal_pres_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<script src="interactive_files/libs/clipboard/clipboard.min.js"></script>
+<script src="interactive_files/libs/quarto-html/tabby.min.js"></script>
+<script src="interactive_files/libs/quarto-html/popper.min.js"></script>
+<script src="interactive_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="interactive_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="interactive_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="interactive_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="interactive_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.57">
 
-  <meta name="author" content="">
-  <title>Introduction to G-methods</title>
+  <title>Interactive Presentation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="causal_pres_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="causal_pres_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="interactive_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="interactive_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -30,11 +29,11 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="causal_pres_files/libs/revealjs/dist/theme/quarto.css">
-  <link href="causal_pres_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="causal_pres_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="causal_pres_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="causal_pres_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="interactive_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="interactive_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="interactive_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="interactive_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="interactive_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -244,7 +243,6 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
-      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -321,185 +319,150 @@
       margin-right: 0; 
     }
   </style>
-  <script src="causal_pres_files/libs/quarto-diagram/mermaid.min.js"></script>
-  <script src="causal_pres_files/libs/quarto-diagram/mermaid-init.js"></script>
-  <link href="causal_pres_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" "=""></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('body').prepend('<div class=\"zoomDiv\"><img src=\"\" class=\"zoomImg\"></div>');
-      // onClick function for all plots (img's)
-      $('img:not(.zoomImg)').click(function() {
-        $('.zoomImg').attr('src', $(this).attr('src')).css({width: '100%'});
-        $('.zoomDiv').css({opacity: '1', width: 'auto', border: '1px solid white', borderRadius: '5px', position: 'fixed', top: '50%', left: '50%', marginRight: '-50%', transform: 'translate(-50%, -50%)', boxShadow: '0px 0px 50px #888888', zIndex: '50', overflow: 'auto', maxHeight: '100%'});
-      });
-      // onClick function for zoomImg
-      $('img.zoomImg').click(function() {
-        $('.zoomDiv').css({opacity: '0', width: '0%'}); 
-      });
-    });
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+  <style>
+    .chart-container {
+      position: relative;
+      margin: auto;
+      height: 400px;
+      width: 600px;
+    }
+    .poll-option {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 30px;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Introduction to G-methods</h1>
-  <p class="subtitle">Dealing with Time-varying Covariates in Causal Inverence</p>
+  <h1 class="title">Interactive Presentation</h1>
 
 <div class="quarto-title-authors">
-<div class="quarto-title-author">
-<div class="quarto-title-author-name">
- 
-</div>
-</div>
 </div>
 
 </section>
-<section>
-<section id="introduction" class="title-slide slide level1 center">
-<h1>Introduction</h1>
+<section id="welcome" class="slide level2" data-background-color="#fff">
+<h2>Welcome</h2>
+<p>Use your phone to participate!</p>
+<div class="qr-code" style="position: absolute; bottom: 20px; right: 20px; width: 150px; height: 150px;">
+<p><img data-src="https://via.placeholder.com/150.png"></p>
+</div>
+</section>
+<section id="interactive-poll" class="slide level2" data-background-color="#fff">
+<h2>Interactive Poll</h2>
+<p>What’s your favorite programming language?</p>
+<div id="poll-container">
+<div id="poll-options">
+<div class="poll-option" onclick="vote('Python')">
+Python
+</div>
+<div class="poll-option" onclick="vote('JavaScript')">
+JavaScript
+</div>
+<div class="poll-option" onclick="vote('Java')">
+Java
+</div>
+<div class="poll-option" onclick="vote('C++')">
+C++
+</div>
+</div>
+<div class="chart-container">
+<canvas id="resultsChart">
+</canvas>
+</div>
+</div>
+<script>
+// Initialize the results chart
+window.addEventListener('load', function() {
+    const ctx = document.getElementById('resultsChart').getContext('2d');
+    window.resultsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Python', 'JavaScript', 'Java', 'C++'],
+            datasets: [{
+                label: 'Votes',
+                data: [0, 0, 0, 0],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+});
 
-</section>
-<section id="motivation" class="slide level2">
-<h2>Motivation</h2>
-</section>
-<section id="the-fundamental-problem" class="slide level2">
-<h2>The fundamental problem</h2>
-<p>Time-varying confounding</p>
-</section>
-<section id="breif-historical-context" class="slide level2">
-<h2>Breif historical context</h2>
-</section>
-<section id="longitudinal-studies" class="slide level2">
-<h2>Longitudinal Studies</h2>
-<ul>
-<li>Often observe Time-varying covariates</li>
-</ul>
-</section>
-<section id="motivating-example" class="slide level2">
-<h2>Motivating example</h2>
-<ul>
-<li>In HIV treatment, CD4 count is used to measure the effect of treatment.
-<ul>
-<li>Higher CD4, the better the treatment is working</li>
-</ul></li>
-<li>CD4 is also effected by HIV viral load
-<ul>
-<li>This is measured before the second treatment is administered as baseline</li>
-</ul></li>
-</ul>
-<div class="cell" data-reveal="true" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph LR
-    L0[CD4 Count t=0] --&gt; A0[Treatment t=0]
-    L0 --&gt; L1[CD4 Count t=1]
-    A0 --&gt; L1
-    L1 --&gt; A1[Treatment t=1]
-    L1 --&gt; Y[Outcome]
-    A1 --&gt; Y
-    A0 --&gt; Y
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</section>
-<section id="traditional-regression-model" class="slide level2">
-<h2>Traditional Regression model</h2>
-<p><span class="math display">\[
-\hat{y} = X_0 + \beta_1 X_1 + ... + \varepsilon
-\]</span></p>
-<p>Assumptions:</p>
-</section>
-<section id="g-formula" class="slide level2 scrollable">
-<h2>G-formula</h2>
-<p>Key idea:</p>
-<p>Using counterfactuals we are able to get a better idea of the treatement effects.</p>
-<p>Assumptions:</p>
-<ol type="1">
-<li>Counterfactual consistency:</li>
-<li>Exchangeability:</li>
-<li>Positivity:</li>
-</ol>
+function vote(option) {
+    // For demonstration, update the chart directly
+    const index = window.resultsChart.data.labels.indexOf(option);
+    window.resultsChart.data.datasets[0].data[index]++;
+    window.resultsChart.update();
+}
 
-<img data-src="Assumptions_dag.png" class="r-stretch quarto-figure-center"><p class="caption">Naimi et al.&nbsp;2016</p><aside class="notes">
-<p>In the motivating example, A0 is the first treatment, Z1 is the viral load, A1 is the second treatment, Y is the CD4, and u is the unmeasured confounder on viral load and CD4.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="g-computation" class="slide level2">
-<h2>G-computation</h2>
-<div class="cell" data-reveal="true" data-layout-align="center">
-<div class="cell-output-display">
-<div id="steps_gcomp">
-<div>
-<pre class="mermaid mermaid-js" data-label="steps_gcomp">flowchart LR
-  id1("Step1: Obtain the \n empirical parameters")
-  id2("Step2: Estimate the \n counterfactual mean")
-  id3("Step3: Fit into \n marginal structural model")
-  id1 --&gt; id2
-  id2 --&gt; id3
-</pre>
-</div>
-</div>
-</div>
-</div>
-<p>The main idea is to use counterfactuals to create an estimation of average effects.</p>
-</section></section>
-<section>
-<section id="ip-weighting-and-marginal-structural-models" class="title-slide slide level1 center">
-<h1>IP-weighting and Marginal Structural Models</h1>
+/* For real-time multi-user functionality, you would add WebSocket code like this:
+const ws = new WebSocket('wss://your-server.com/ws');
 
-</section>
-<section id="inverse-probability---weighting" class="slide level2">
-<h2>Inverse Probability - Weighting</h2>
-<ul>
-<li>Goal: Create a pseudo-population in which there is no association between the covariates <span class="math inline">\(L\)</span> and the Treatment <span class="math inline">\(A\)</span>.</li>
-</ul>
-<div class="def">
-<p>The weights for IP weighting are found by <span class="math display">\[
-W^A = \frac{p}{f(A|L)}, \quad 0 &lt; p &lt; 1
-\]</span> The choice of <span class="math inline">\(p\)</span> is determined such that the pseudo-population probability of treatment will not depend on the cofounders.</p>
-</div>
+ws.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    updateChart(data);
+};
+
+function updateChart(data) {
+    window.resultsChart.data.datasets[0].data = data;
+    window.resultsChart.update();
+}
+*/
+</script>
 <div class="quarto-auto-generated-content">
-<p><img src="_extensions/nathenbyford/baylor_theme/logo.png" class="slide-logo"></p>
 <div class="footer footer-default">
-<p>Nathen Byford</p>
+
 </div>
 </div>
-</section></section>
+</section>
     </div>
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="causal_pres_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="interactive_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="causal_pres_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="interactive_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="interactive_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="interactive_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="interactive_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="interactive_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="causal_pres_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="interactive_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="interactive_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="interactive_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="interactive_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -534,7 +497,7 @@ W^A = \frac{p}{f(A|L)}, \quad 0 &lt; p &lt; 1
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: 'c/t',
+        slideNumber: false,
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -693,82 +656,6 @@ W^A = \frac{p}{f(A|L)}, \quad 0 &lt; p &lt; 1
         ]
       });
     </script>
-    
-
-    <script>
-
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-
-      // slide changes (different for each slide format).
-
-      (function () {
-
-        // dispatch for htmlwidgets
-
-        function fireSlideEnter() {
-
-          const event = window.document.createEvent("Event");
-
-          event.initEvent("slideenter", true, true);
-
-          window.document.dispatchEvent(event);
-
-        }
-
-    
-
-        function fireSlideChanged(previousSlide, currentSlide) {
-
-          fireSlideEnter();
-
-    
-
-          // dispatch for shiny
-
-          if (window.jQuery) {
-
-            if (previousSlide) {
-
-              window.jQuery(previousSlide).trigger("hidden");
-
-            }
-
-            if (currentSlide) {
-
-              window.jQuery(currentSlide).trigger("shown");
-
-            }
-
-          }
-
-        }
-
-    
-
-        // hookup for slidy
-
-        if (window.w3c_slidy) {
-
-          window.w3c_slidy.add_observer(function (slide_num) {
-
-            // slide_num starts at position 1
-
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-
-          });
-
-        }
-
-    
-
-      })();
-
-    </script>
-
-    
-
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

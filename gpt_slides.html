@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="causal_pres_files/libs/clipboard/clipboard.min.js"></script>
-<script src="causal_pres_files/libs/quarto-html/tabby.min.js"></script>
-<script src="causal_pres_files/libs/quarto-html/popper.min.js"></script>
-<script src="causal_pres_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="causal_pres_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="causal_pres_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="causal_pres_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="causal_pres_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+<script src="gpt_slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="gpt_slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="gpt_slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="gpt_slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="gpt_slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="gpt_slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="gpt_slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="gpt_slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="">
-  <title>Introduction to G-methods</title>
+  <meta name="dcterms.date" content="2024-10-25">
+  <title>IP-weighting and Marginal Structural Models (MSMs)</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="causal_pres_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="causal_pres_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="gpt_slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="gpt_slides_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -30,11 +31,11 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="causal_pres_files/libs/revealjs/dist/theme/quarto.css">
-  <link href="causal_pres_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="causal_pres_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="causal_pres_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="causal_pres_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="gpt_slides_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="gpt_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="gpt_slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="gpt_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="gpt_slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -321,9 +322,6 @@
       margin-right: 0; 
     }
   </style>
-  <script src="causal_pres_files/libs/quarto-diagram/mermaid.min.js"></script>
-  <script src="causal_pres_files/libs/quarto-diagram/mermaid-init.js"></script>
-  <link href="causal_pres_files/libs/quarto-diagram/mermaid.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" "=""></script>
   <script type="text/javascript">
     $(document).ready(function() {
@@ -345,137 +343,195 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Introduction to G-methods</h1>
-  <p class="subtitle">Dealing with Time-varying Covariates in Causal Inverence</p>
+  <h1 class="title">IP-weighting and Marginal Structural Models (MSMs)</h1>
 
 <div class="quarto-title-authors">
-<div class="quarto-title-author">
-<div class="quarto-title-author-name">
- 
-</div>
-</div>
 </div>
 
+  <p class="date">October 25, 2024</p>
 </section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
 <h1>Introduction</h1>
 
 </section>
-<section id="motivation" class="slide level2">
-<h2>Motivation</h2>
-</section>
-<section id="the-fundamental-problem" class="slide level2">
-<h2>The fundamental problem</h2>
-<p>Time-varying confounding</p>
-</section>
-<section id="breif-historical-context" class="slide level2">
-<h2>Breif historical context</h2>
-</section>
-<section id="longitudinal-studies" class="slide level2">
-<h2>Longitudinal Studies</h2>
-<ul>
-<li>Often observe Time-varying covariates</li>
-</ul>
-</section>
 <section id="motivating-example" class="slide level2">
-<h2>Motivating example</h2>
+<h2>Motivating Example</h2>
+<div class="def">
+<p>We are interested in the question “What is the average causal effect of smoking cessation on body weight gain?”</p>
+</div>
+<p>Simple models</p>
 <ul>
-<li>In HIV treatment, CD4 count is used to measure the effect of treatment.
-<ul>
-<li>Higher CD4, the better the treatment is working</li>
-</ul></li>
-<li>CD4 is also effected by HIV viral load
-<ul>
-<li>This is measured before the second treatment is administered as baseline</li>
-</ul></li>
+<li></li>
 </ul>
-<div class="cell" data-reveal="true" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph LR
-    L0[CD4 Count t=0] --&gt; A0[Treatment t=0]
-    L0 --&gt; L1[CD4 Count t=1]
-    A0 --&gt; L1
-    L1 --&gt; A1[Treatment t=1]
-    L1 --&gt; Y[Outcome]
-    A1 --&gt; Y
-    A0 --&gt; Y
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
 </section>
-<section id="traditional-regression-model" class="slide level2">
-<h2>Traditional Regression model</h2>
-<p><span class="math display">\[
-\hat{y} = X_0 + \beta_1 X_1 + ... + \varepsilon
-\]</span></p>
-<p>Assumptions:</p>
-</section>
-<section id="g-formula" class="slide level2 scrollable">
-<h2>G-formula</h2>
-<p>Key idea:</p>
-<p>Using counterfactuals we are able to get a better idea of the treatement effects.</p>
-<p>Assumptions:</p>
-<ol type="1">
-<li>Counterfactual consistency:</li>
-<li>Exchangeability:</li>
-<li>Positivity:</li>
-</ol>
-
-<img data-src="Assumptions_dag.png" class="r-stretch quarto-figure-center"><p class="caption">Naimi et al.&nbsp;2016</p><aside class="notes">
-<p>In the motivating example, A0 is the first treatment, Z1 is the viral load, A1 is the second treatment, Y is the CD4, and u is the unmeasured confounder on viral load and CD4.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="g-computation" class="slide level2">
-<h2>G-computation</h2>
-<div class="cell" data-reveal="true" data-layout-align="center">
-<div class="cell-output-display">
-<div id="steps_gcomp">
-<div>
-<pre class="mermaid mermaid-js" data-label="steps_gcomp">flowchart LR
-  id1("Step1: Obtain the \n empirical parameters")
-  id2("Step2: Estimate the \n counterfactual mean")
-  id3("Step3: Fit into \n marginal structural model")
-  id1 --&gt; id2
-  id2 --&gt; id3
-</pre>
-</div>
-</div>
-</div>
-</div>
-<p>The main idea is to use counterfactuals to create an estimation of average effects.</p>
+<section id="transition-to-ip-weighting" class="slide level2">
+<h2>Transition to IP Weighting</h2>
+<ul>
+<li><strong>G-formula</strong> and <strong>G-computation</strong> focus on modeling the <strong>outcome</strong>.</li>
+<li><strong>IP-weighting</strong> provides an alternative approach by modeling the <strong>treatment assignment</strong> rather than the outcome.</li>
+</ul>
 </section></section>
 <section>
-<section id="ip-weighting-and-marginal-structural-models" class="title-slide slide level1 center">
-<h1>IP-weighting and Marginal Structural Models</h1>
+<section id="inverse-probability-weighting" class="title-slide slide level1 center">
+<h1>Inverse Probability Weighting</h1>
 
 </section>
-<section id="inverse-probability---weighting" class="slide level2">
-<h2>Inverse Probability - Weighting</h2>
+<section id="inverse-probability-weighting-overview" class="slide level2">
+<h2>Inverse Probability Weighting: Overview</h2>
 <ul>
-<li>Goal: Create a pseudo-population in which there is no association between the covariates <span class="math inline">\(L\)</span> and the Treatment <span class="math inline">\(A\)</span>.</li>
+<li>A method of creating a pseudo-population that uses <em>weights</em> to account for confounding.</li>
+<li>Each individual is weighted by the inverse of the <strong>probability of receiving the treatment they actually received</strong>.</li>
 </ul>
-<div class="def">
-<p>The weights for IP weighting are found by <span class="math display">\[
-W^A = \frac{p}{f(A|L)}, \quad 0 &lt; p &lt; 1
-\]</span> The choice of <span class="math inline">\(p\)</span> is determined such that the pseudo-population probability of treatment will not depend on the cofounders.</p>
-</div>
+<p><span class="math display">\[
+\operatorname{Weight} = \frac{1}{Pr(A \mid L)}
+\]</span></p>
+</section>
+<section id="ipw-assumptions" class="slide level2">
+<h2>IPW: Assumptions</h2>
+<ul>
+<li><strong>No unmeasured confounding</strong>: All confounders must be measured.</li>
+<li><strong>Correct specification of the propensity score model</strong>: The model for treatment assignment must be correct.</li>
+<li><strong>Positivity</strong>: There must be non-zero probability of receiving each treatment for all levels of confounders.</li>
+<li><strong>Consistency</strong>: Observed outcomes must correspond to the treatment actually received.</li>
+<li><strong>Stable Unit Treatment Value Assumption (SUTVA)</strong>: There is no interference between individuals (i.e., one person’s treatment does not affect another’s outcome).</li>
+</ul>
+</section>
+<section id="ipw-rationale" class="slide level2">
+<h2>IPW: Rationale</h2>
+<ul>
+<li>Goal: Create a <strong>pseudo-population</strong> where treatment assignment is <strong>independent</strong> of confounders.</li>
+<li>Intuition: If someone with low probability of treatment receives it, they are <strong>upweighted</strong> in the analysis.</li>
+</ul>
+</section>
+<section id="ipw-pros-and-cons" class="slide level2">
+<h2>IPW: Pros and Cons</h2>
+<ul>
+<li><strong>Advantages:</strong>
+<ul>
+<li>More <strong>robust to model misspecification</strong> of the outcome model.</li>
+<li>Avoids directly modeling the outcome.</li>
+</ul></li>
+<li><strong>Disadvantages:</strong>
+<ul>
+<li>Requires correct specification of the <strong>propensity score model</strong>.</li>
+<li><strong>Extreme weights</strong> can lead to instability and inefficiency.</li>
+<li>The size of the pseudo-population is twice the size of the study population</li>
+</ul></li>
+</ul>
+</section>
+<section id="ipw-stabilized-weights" class="slide level2">
+<h2>IPW: Stabilized weights</h2>
+<p>Stabilized weights: <span class="math display">\[\operatorname{SW}_i = \frac{P(A_i)}{P(A_i|L_i)}\]</span></p>
+<p>Key Properties</p>
+<ul>
+<li>Numerator: Marginal probability of treatment</li>
+<li>Denominator: Conditional probability of treatment</li>
+<li>Expected value of stabilized weights approximately 1</li>
+</ul>
+</section>
+<section id="ipw-example" class="slide level2 scrollable">
+<h2>IPW: Example</h2>
+<ol type="1">
+<li><p><strong>Estimate Propensity Score:</strong> <span class="math display">\[
+\hat{P}(Treatment \mid Confounders)
+\]</span> Example: Logistic regression model for the probability of treatment.</p></li>
+<li><p><strong>Calculate Weights:</strong> <span class="math display">\[
+Weight = \frac{1}{\hat{P}(Treatment \mid Confounders)}
+\]</span></p></li>
+<li><p><strong>Weighted Outcome Model:</strong> <span class="math display">\[
+E(Y \mid Treatment) = f(Weighted Data)
+\]</span></p></li>
+</ol>
+</section></section>
+<section>
+<section id="marginal-structural-models" class="title-slide slide level1 center">
+<h1>Marginal Structural Models</h1>
+
+</section>
+<section id="marginal-structural-models-msms-overview" class="slide level2">
+<h2>Marginal Structural Models (MSMs): Overview</h2>
+<ul>
+<li>Developed to handle <strong>time-varying treatments</strong> and <strong>confounding</strong>.</li>
+<li>Combine <strong>IPW</strong> and <strong>structural models</strong> to estimate causal effects.</li>
+<li>MSMs model the effect of treatment on outcome, weighted by IPW to adjust for confounders.</li>
+</ul>
+</section>
+<section id="msms-example" class="slide level2 scrollable">
+<h2>MSMs: Example</h2>
+<ol type="1">
+<li><p><strong>Step 1: Calculate Stabilized Weights</strong> <span class="math display">\[
+SW = \frac{P(Treatment)}{P(Treatment \mid Confounders)}
+\]</span> These weights are used to reduce variance while accounting for confounding.</p></li>
+<li><p><strong>Step 2: Fit MSM</strong> <span class="math display">\[
+Y = \beta_0 + \beta_1 \times Treatment
+\]</span> Weighted regression with <strong>stabilized weights</strong>.</p></li>
+</ol>
+</section>
+<section id="msms-key-strengths" class="slide level2">
+<h2>MSMs: Key Strengths</h2>
+<ul>
+<li><strong>Handles time-varying treatments</strong> and confounders.</li>
+<li>Suitable for longitudinal data and <strong>dynamic treatment regimes</strong>.</li>
+<li>Can capture <strong>causal effects</strong> that change over time.</li>
+</ul>
+</section>
+<section id="comparing-methods" class="slide level2 smaller">
+<h2>Comparing Methods</h2>
+<table class="caption-top">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 25%">
+<col style="width: 30%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Key Idea</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>G-computation</strong></td>
+<td>Model counterfactual outcomes</td>
+<td>Directly estimates effects</td>
+<td>Model misspecification is critical</td>
+</tr>
+<tr class="even">
+<td><strong>IP-weighting</strong></td>
+<td>Re-weight to balance confounders</td>
+<td>Avoids modeling the outcome</td>
+<td>Sensitive to extreme weights</td>
+</tr>
+<tr class="odd">
+<td><strong>MSMs</strong></td>
+<td>Combine IPW with structural models</td>
+<td>Handles time-varying treatments</td>
+<td>Complex to implement, requires weights</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="conclusion" class="slide level2">
+<h2>Conclusion</h2>
+<ul>
+<li><strong>G-computation</strong>: Direct modeling of potential outcomes.</li>
+<li><strong>IP-weighting</strong>: Uses weights to adjust for confounders.</li>
+<li><strong>MSMs</strong>: Combines IP-weighting and models for complex settings.</li>
+<li>Choosing the right method depends on the context (e.g., time-varying treatments, data structure).</li>
+</ul>
+</section>
+<section id="references" class="slide level2">
+<h2>References</h2>
+<ul>
+<li>Robins, J.M. (1986). “A new approach to causal inference in mortality studies.”</li>
+<li>Hernán, M.A., &amp; Robins, J.M. (2020). <em>Causal Inference: What If.</em></li>
+<li>VanderWeele, T.J. (2015). <em>Explanation in Causal Inference: Methods for Mediation and Interaction.</em></li>
+<li>Slide help from chatGPT</li>
+</ul>
 <div class="quarto-auto-generated-content">
 <p><img src="_extensions/nathenbyford/baylor_theme/logo.png" class="slide-logo"></p>
 <div class="footer footer-default">
@@ -487,19 +543,19 @@ W^A = \frac{p}{f(A|L)}, \quad 0 &lt; p &lt; 1
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="causal_pres_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="causal_pres_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="causal_pres_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="causal_pres_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="gpt_slides_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -693,82 +749,6 @@ W^A = \frac{p}{f(A|L)}, \quad 0 &lt; p &lt; 1
         ]
       });
     </script>
-    
-
-    <script>
-
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-
-      // slide changes (different for each slide format).
-
-      (function () {
-
-        // dispatch for htmlwidgets
-
-        function fireSlideEnter() {
-
-          const event = window.document.createEvent("Event");
-
-          event.initEvent("slideenter", true, true);
-
-          window.document.dispatchEvent(event);
-
-        }
-
-    
-
-        function fireSlideChanged(previousSlide, currentSlide) {
-
-          fireSlideEnter();
-
-    
-
-          // dispatch for shiny
-
-          if (window.jQuery) {
-
-            if (previousSlide) {
-
-              window.jQuery(previousSlide).trigger("hidden");
-
-            }
-
-            if (currentSlide) {
-
-              window.jQuery(currentSlide).trigger("shown");
-
-            }
-
-          }
-
-        }
-
-    
-
-        // hookup for slidy
-
-        if (window.w3c_slidy) {
-
-          window.w3c_slidy.add_observer(function (slide_num) {
-
-            // slide_num starts at position 1
-
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-
-          });
-
-        }
-
-    
-
-      })();
-
-    </script>
-
-    
-
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

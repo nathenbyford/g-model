@@ -14,6 +14,17 @@ library(ggdag)
 ```
 
 
+# Introduction
+
+## Motivation
+
+
+## The fundamental problem
+
+Time-varying confounding
+
+## Breif historical context
+
 ## Longitudinal Studies
 
 - Often observe Time-varying covariates
@@ -24,6 +35,17 @@ library(ggdag)
     - Higher CD4, the better the treatment is working
 - CD4 is also effected by HIV viral load
     - This is measured before the second treatment is administered as baseline
+
+```{mermaid}
+graph LR
+    L0[CD4 Count t=0] --> A0[Treatment t=0]
+    L0 --> L1[CD4 Count t=1]
+    A0 --> L1
+    L1 --> A1[Treatment t=1]
+    L1 --> Y[Outcome]
+    A1 --> Y
+    A0 --> Y
+```
 
 
 ## Traditional Regression model
@@ -69,3 +91,99 @@ flowchart LR
 The main idea is to use counterfactuals to create an estimation of average effects.
 
 # IP-weighting and Marginal Structural Models
+
+## Inverse Probability - Weighting
+
+- Goal: Create a pseudo-population in which there is no association between the covariates $L$ and the Treatment $A$.
+
+:::{.def}
+The weights for IP weighting are found by
+$$
+W^A = \frac{p}{f(A|L)}, \quad 0 < p < 1
+$$
+The choice of $p$ is determined such that the pseudo-population probability of treatment will not depend on the cofounders.
+:::
+
+# G-computation
+
+
+## G-computation: Overview
+
+- Originates from Robins (1986).
+- Directly models the **counterfactual outcomes**.
+- Steps:
+  1. Fit a model for the outcome based on treatment and confounders.
+  2. Predict outcomes for everyone under each treatment condition.
+  3. Average predicted outcomes to estimate the treatment effect.
+
+
+
+## G-computation: Assumptions
+
+- **No unmeasured confounding**: All confounders must be measured and correctly included in the model.
+- **Correct model specification**: The model for the outcome must be correctly specified.
+- **Positivity (Overlap)**: There must be non-zero probability of receiving each treatment for all levels of confounders.
+- **Consistency**: The potential outcome under the observed treatment equals the actual observed outcome.
+
+
+
+## G-formula: Overview
+
+- **G-formula** (Generalized Intervention Formula) is a **mathematical representation** of the distribution of outcomes under interventions.
+- Provides a way to calculate the **counterfactual outcome distribution** if we intervene to assign treatment $A = a$.
+- **G-computation** uses the G-formula to estimate causal effects.
+
+$$
+P(Y(a)) = \sum_{L} P(Y \mid A=a, L) P(L)
+$$
+
+:::{.subsubtext}
+
+Where:
+  $Y(a)$: Potential outcome under treatment $a$.  
+  $A$: Treatment or exposure.  
+  $L$: Confounders.  
+  $P(Y \mid A=a, L)$: Conditional distribution of the outcome given treatment and confounders.
+
+:::
+
+
+## What does the G-formula estimate? 
+
+:::{.incremental}
+- The **counterfactual distribution** of outcomes if everyone in the population received treatment $A = a$.
+- It models the causal effect of treatment by adjusting for confounding factors (e.g., age, comorbidities).
+:::
+
+
+## G-formula: Steps
+
+1. **Model outcome** $Y$ as a function of treatment $A$ and confounders $L$.
+2. **Predict counterfactual outcomes** $Y(a)$ by intervening on the treatment (i.e., fixing $A = a$).
+3. **Average outcomes** to estimate the expected outcome under treatment $a$.
+4. Repeat for other treatment levels to compare effects.
+
+
+
+## G-formula: Assumptions
+
+- **No unmeasured confounding**: All confounders affecting treatment and outcome must be measured.
+- **Correct model specification**: The model used for the outcome must be correctly specified.
+- **Positivity**: There must be a positive probability of receiving each treatment for all combinations of confounders.
+- **Consistency**: Observed outcomes under the given treatment match the potential outcomes.
+
+
+
+## How does the G-formula relate to G-computation?
+
+:::{.incremental}
+- The **G-formula** is a mathematical formula representing the counterfactual distribution.
+- **G-computation** is the **algorithmic procedure** used to implement the G-formula to estimate causal effects in practice.
+:::
+
+
+## Example: Applying the G-formula
+
+1. Fit a model for $Y$ as a function of $A$ and $L$.
+2. Use this model to predict outcomes $Y(a)$ if everyone received treatment $a$.
+3. Average the predicted outcomes to get the causal effect of treatment $a$.
