@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="">
-  <meta name="dcterms.date" content="2024-10-25">
+  <meta name="dcterms.date" content="2024-10-28">
   <title>IP-weighting and Marginal Structural Models (MSMs)</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -348,7 +348,7 @@
 <div class="quarto-title-authors">
 </div>
 
-  <p class="date">October 25, 2024</p>
+  <p class="date">October 28, 2024</p>
 </section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
@@ -360,17 +360,35 @@
 <div class="def">
 <p>We are interested in the question “What is the average causal effect of smoking cessation on body weight gain?”</p>
 </div>
-<p>Simple models</p>
 <ul>
-<li></li>
+<li>Using data from NHEFS study from 1971-1982 with a baseline visit and a follow-up visit
+<ul>
+<li>Subjects are considered treated <span class="math inline">\(A = 1\)</span> if they quit smoking before the follow-up</li>
+</ul></li>
+<li>Only individuals with known age, sex, race, weight, height, education, alcohol use and intensity of smoking at baseline and followup are considered.</li>
 </ul>
 </section>
-<section id="transition-to-ip-weighting" class="slide level2">
-<h2>Transition to IP Weighting</h2>
-<ul>
-<li><strong>G-formula</strong> and <strong>G-computation</strong> focus on modeling the <strong>outcome</strong>.</li>
-<li><strong>IP-weighting</strong> provides an alternative approach by modeling the <strong>treatment assignment</strong> rather than the outcome.</li>
-</ul>
+<section id="example-data" class="slide level2 scrollable">
+<h2>Example Data</h2>
+
+<img data-src="mean_baseline.png" class="quarto-figure quarto-figure-center r-stretch"><p>Individuals are classified as treated <span class="math inline">\(A=1\)</span> based on two conditions:</p>
+<ol type="a">
+<li>If they reported being smokers at baseline, and</li>
+<li>If they have reported to quit smoking in 1982.</li>
+</ol>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Selection Bias</strong></p>
+</div>
+<div class="callout-content">
+<p>Bias may be induced by condition (b) due to potential selection into/out of the study.</p>
+</div>
+</div>
+</div>
 </section></section>
 <section>
 <section id="inverse-probability-weighting" class="title-slide slide level1 center">
@@ -384,7 +402,7 @@
 <li>Each individual is weighted by the inverse of the <strong>probability of receiving the treatment they actually received</strong>.</li>
 </ul>
 <p><span class="math display">\[
-\operatorname{Weight} = \frac{1}{Pr(A \mid L)}
+\operatorname{Weight} = \frac{1}{\text{Pr}(A \mid L)}
 \]</span></p>
 </section>
 <section id="ipw-assumptions" class="slide level2">
@@ -404,6 +422,9 @@
 <li>Intuition: If someone with low probability of treatment receives it, they are <strong>upweighted</strong> in the analysis.</li>
 </ul>
 </section>
+<section id="horvitz-thompson-estimators" class="slide level2">
+<h2>Horvitz-Thompson estimators</h2>
+</section>
 <section id="ipw-pros-and-cons" class="slide level2">
 <h2>IPW: Pros and Cons</h2>
 <ul>
@@ -422,28 +443,26 @@
 </section>
 <section id="ipw-stabilized-weights" class="slide level2">
 <h2>IPW: Stabilized weights</h2>
-<p>Stabilized weights: <span class="math display">\[\operatorname{SW}_i = \frac{P(A_i)}{P(A_i|L_i)}\]</span></p>
+<p>Stabilized weights: <span class="math display">\[\operatorname{SW}_i = \frac{\text{Pr}(A_i)}{\text{Pr}(A_i|L_i)} = \frac{f(A)}{f(A|L)}\]</span></p>
 <p>Key Properties</p>
 <ul>
 <li>Numerator: Marginal probability of treatment</li>
 <li>Denominator: Conditional probability of treatment</li>
-<li>Expected value of stabilized weights approximately 1</li>
+<li>Expected value of stabilized weights approximately 1 (Pseudo-population size equal to sample population)</li>
 </ul>
 </section>
-<section id="ipw-example" class="slide level2 scrollable">
-<h2>IPW: Example</h2>
+<section id="iwp-example" class="slide level2 scrollable">
+<h2>IWP: Example</h2>
 <ol type="1">
-<li><p><strong>Estimate Propensity Score:</strong> <span class="math display">\[
-\hat{P}(Treatment \mid Confounders)
-\]</span> Example: Logistic regression model for the probability of treatment.</p></li>
-<li><p><strong>Calculate Weights:</strong> <span class="math display">\[
-Weight = \frac{1}{\hat{P}(Treatment \mid Confounders)}
-\]</span></p></li>
-<li><p><strong>Weighted Outcome Model:</strong> <span class="math display">\[
-E(Y \mid Treatment) = f(Weighted Data)
-\]</span></p></li>
+<li><p><strong>Estimate Propensity Score:</strong></p></li>
+<li><p><strong>Calculate Weights:</strong></p></li>
+<li><p><strong>Weighted Outcome Model:</strong></p></li>
 </ol>
-</section></section>
+</section>
+<section id="ipw-stabilized-example" class="slide level2">
+<h2>IPW: Stabilized Example</h2>
+
+<img data-src="SW-example.png" class="r-stretch quarto-figure-center"><p class="caption">Hernan and robins</p></section></section>
 <section>
 <section id="marginal-structural-models" class="title-slide slide level1 center">
 <h1>Marginal Structural Models</h1>
@@ -749,6 +768,82 @@ Y = \beta_0 + \beta_1 \times Treatment
         ]
       });
     </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

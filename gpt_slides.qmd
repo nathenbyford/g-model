@@ -7,6 +7,16 @@ format: baylor_theme-revealjs
 footer: "Nathen Byford"
 ---
 
+```{r}
+#| include: false
+
+library(tidyverse); theme_set(theme_bw())
+library(causaldata)
+
+dat <- nhefs
+```
+
+
 # Introduction
 
 
@@ -16,16 +26,47 @@ footer: "Nathen Byford"
 We are interested in the question "What is the average causal effect of smoking cessation on body weight gain?"
 :::
 
-Simple models
+- Using data from NHEFS study from 1971-1982 with a baseline visit and a follow-up visit
+    - Subjects are considered treated $A = 1$ if they quit smoking before the follow-up
+    
+- Only individuals with known age, sex, race, weight, height, education, alcohol use and intensity of smoking at baseline and followup are considered.
 
-- 
+## Example Data
+
+![](mean_baseline.png){fig-align='center'}
+
+Individuals are classified as treated $A=1$ based on two conditions:
+
+(a) If they reported being smokers at baseline, and
+(b) If they have reported to quit smoking in 1982.
+
+:::{.callout-warning}
+## Selection Bias
+
+Bias may be induced by condition (b) due to potential selection into/out of the study.
+:::
+
+```{r}
+#| echo: false
+#| eval: false
+#| tbl-cap: "Mean Baseline Characteristics"
+
+dat |> 
+  mutate(
+    "trt" = qsmk,
+    "University" = education == 5,
+    "Men" = sex == 0,
+    "White" = race == 0
+    ) |> 
+  select(
+    qsmk, age, Men, White, University, wt71, smokeintensity,
+    smokeyrs
+  ) |> 
+  gtsummary::tbl_summary(by = "trt")
 
 
+```
 
-## Transition to IP Weighting
-
-- **G-formula** and **G-computation** focus on modeling the **outcome**.
-- **IP-weighting** provides an alternative approach by modeling the **treatment assignment** rather than the outcome.
 
 
 # Inverse Probability Weighting
@@ -37,7 +78,7 @@ Simple models
 - Each individual is weighted by the inverse of the **probability of receiving the treatment they actually received**.
 
 $$
-\operatorname{Weight} = \frac{1}{Pr(A \mid L)}
+\operatorname{Weight} = \frac{1}{\text{Pr}(A \mid L)}
 $$
 
 
@@ -57,6 +98,9 @@ $$
 - Goal: Create a **pseudo-population** where treatment assignment is **independent** of confounders.
 - Intuition: If someone with low probability of treatment receives it, they are **upweighted** in the analysis.
 
+## Horvitz-Thompson estimators
+
+
 
 ## IPW: Pros and Cons
 
@@ -73,33 +117,25 @@ $$
 ## IPW: Stabilized weights
 
 Stabilized weights:
-$$\operatorname{SW}_i = \frac{P(A_i)}{P(A_i|L_i)}$$
+$$\operatorname{SW}_i = \frac{\text{Pr}(A_i)}{\text{Pr}(A_i|L_i)} = \frac{f(A)}{f(A|L)}$$
 
 Key Properties
 
 - Numerator: Marginal probability of treatment
 - Denominator: Conditional probability of treatment
-- Expected value of stabilized weights approximately 1
+- Expected value of stabilized weights approximately 1 (Pseudo-population size equal to sample population)
 
-## IPW: Example
+## IWP: Example
 
 1. **Estimate Propensity Score:**
-   $$
-   \hat{P}(Treatment \mid Confounders)
-   $$
-   Example: Logistic regression model for the probability of treatment.
-
+  
 2. **Calculate Weights:**
-   $$
-   Weight = \frac{1}{\hat{P}(Treatment \mid Confounders)}
-   $$
 
 3. **Weighted Outcome Model:**
-   $$
-   E(Y \mid Treatment) = f(Weighted Data)
-   $$
 
+## IPW: Stabilized Example
 
+![Hernan and robins](SW-example.png)
 
 
 
