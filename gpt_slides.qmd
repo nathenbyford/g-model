@@ -110,7 +110,7 @@ $$
 
 ## IPW: Rationale
 
-![](balance.png){fig-align="center"}
+![https://matheusfacure.github.io/python-causality-handbook/11-Propensity-Score.html](balance.png){fig-align="center"}
 
 1. In observational studies, treatment assignment isn't random
 2. Give more weight to "surprising" observations and less weight to "expected" observations
