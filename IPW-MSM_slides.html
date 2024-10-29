@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="gpt_slides_files/libs/clipboard/clipboard.min.js"></script>
-<script src="gpt_slides_files/libs/quarto-html/tabby.min.js"></script>
-<script src="gpt_slides_files/libs/quarto-html/popper.min.js"></script>
-<script src="gpt_slides_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="gpt_slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="gpt_slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="gpt_slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="gpt_slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+<script src="IPW-MSM_slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="IPW-MSM_slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="IPW-MSM_slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="IPW-MSM_slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="IPW-MSM_slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="IPW-MSM_slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="IPW-MSM_slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="IPW-MSM_slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="">
-  <meta name="dcterms.date" content="2024-10-28">
+  <meta name="dcterms.date" content="2024-10-29">
   <title>IP-weighting and Marginal Structural Models (MSMs)</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="gpt_slides_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="gpt_slides_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="IPW-MSM_slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="IPW-MSM_slides_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -32,7 +32,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -43,7 +43,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -71,7 +71,7 @@
     code span.at { color: #657422; } /* Attribute */
     code span.bn { color: #ad0000; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
     code span.ch { color: #20794d; } /* Char */
     code span.cn { color: #8f5902; } /* Constant */
     code span.co { color: #5e5e5e; } /* Comment */
@@ -85,7 +85,7 @@
     code span.fu { color: #4758ab; } /* Function */
     code span.im { color: #00769e; } /* Import */
     code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
     code span.op { color: #5e5e5e; } /* Operator */
     code span.ot { color: #003b4f; } /* Other */
     code span.pp { color: #ad0000; } /* Preprocessor */
@@ -96,11 +96,11 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="gpt_slides_files/libs/revealjs/dist/theme/quarto.css">
-  <link href="gpt_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="gpt_slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="gpt_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="gpt_slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="IPW-MSM_slides_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="IPW-MSM_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="IPW-MSM_slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="IPW-MSM_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="IPW-MSM_slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -222,7 +222,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -412,7 +413,7 @@
 <div class="quarto-title-authors">
 </div>
 
-  <p class="date">October 28, 2024</p>
+  <p class="date">October 29, 2024</p>
 </section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
@@ -432,10 +433,10 @@
 <li>Only individuals with known age, sex, race, weight, height, education, alcohol use and intensity of smoking at baseline and followup are considered.</li>
 </ul>
 </section>
-<section id="example-data" class="slide level2">
+<section id="example-data" class="slide level2 scrollable">
 <h2>Example Data</h2>
 
-<img data-src="mean_baseline.png" class="r-stretch quarto-figure-center"><p>Individuals are classified as treated <span class="math inline">\(A=1\)</span> based on two conditions:</p>
+<img data-src="mean_baseline.png" class="quarto-figure quarto-figure-center r-stretch"><p>Individuals are classified as treated <span class="math inline">\(A=1\)</span> based on two conditions:</p>
 <ol type="a">
 <li>If they reported being smokers at baseline, and</li>
 <li>If they have reported to quit smoking in 1982.</li>
@@ -495,7 +496,7 @@ E[Y|A] = \theta_0 + \theta_1A
 <li><strong>Stable Unit Treatment Value Assumption (SUTVA)</strong>: There is no interference between individuals (i.e., one person’s treatment does not affect another’s outcome).</li>
 </ul>
 </section>
-<section id="ipw-rationale" class="slide level2">
+<section id="ipw-rationale" class="slide level2 scrollable">
 <h2>IPW: Rationale</h2>
 
 <img data-src="balance.png" class="r-stretch quarto-figure-center"><p class="caption">Python causality handbook - Facure</p><ol type="1">
@@ -550,38 +551,38 @@ E[Y|A] = \theta_0 + \theta_1A
 <span class="math inline">\(L\)</span> = time-varying confounders</p>
 </div>
 </section>
-<section id="iwp-example" class="slide level2 smaller">
+<section id="iwp-example" class="slide level2 smaller scrollable">
 <h2>IWP: Example</h2>
 <ol type="1">
 <li><strong>Estimate Propensity Score:</strong> Using logistic regression</li>
 </ol>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
-<span id="cb1-2"><a href="#cb1-2"></a>  qsmk <span class="sc">~</span> sex <span class="sc">+</span> race <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">as.factor</span>(education) <span class="sc">+</span> smokeintensity <span class="sc">+</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>    <span class="fu">I</span>(smokeintensity <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span> smokeyrs <span class="sc">+</span> <span class="fu">I</span>(smokeyrs <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>    <span class="fu">as.factor</span>(exercise) <span class="sc">+</span> <span class="fu">as.factor</span>(active) <span class="sc">+</span> wt71 <span class="sc">+</span> <span class="fu">I</span>(wt71 <span class="sc">^</span> <span class="dv">2</span>),</span>
-<span id="cb1-6"><a href="#cb1-6"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(),</span>
-<span id="cb1-7"><a href="#cb1-7"></a>  <span class="at">data =</span> nhefs.nmv</span>
-<span id="cb1-8"><a href="#cb1-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb1-2"><a href=""></a>  qsmk <span class="sc">~</span> sex <span class="sc">+</span> race <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1-3"><a href=""></a>    <span class="fu">as.factor</span>(education) <span class="sc">+</span> smokeintensity <span class="sc">+</span></span>
+<span id="cb1-4"><a href=""></a>    <span class="fu">I</span>(smokeintensity <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span> smokeyrs <span class="sc">+</span> <span class="fu">I</span>(smokeyrs <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1-5"><a href=""></a>    <span class="fu">as.factor</span>(exercise) <span class="sc">+</span> <span class="fu">as.factor</span>(active) <span class="sc">+</span> wt71 <span class="sc">+</span> <span class="fu">I</span>(wt71 <span class="sc">^</span> <span class="dv">2</span>),</span>
+<span id="cb1-6"><a href=""></a>  <span class="at">family =</span> <span class="fu">binomial</span>(),</span>
+<span id="cb1-7"><a href=""></a>  <span class="at">data =</span> nhefs.nmv</span>
+<span id="cb1-8"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <ol start="2" type="1">
 <li><strong>Calculate Weights:</strong> Non-stabilized weights</li>
 </ol>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>p.qsmk.obs <span class="ot">&lt;-</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fu">ifelse</span>(nhefs.nmv<span class="sc">$</span>qsmk <span class="sc">==</span> <span class="dv">0</span>,</span>
-<span id="cb2-3"><a href="#cb2-3"></a>         <span class="dv">1</span> <span class="sc">-</span> <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">"response"</span>),</span>
-<span id="cb2-4"><a href="#cb2-4"></a>         <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">"response"</span>))</span>
-<span id="cb2-5"><a href="#cb2-5"></a></span>
-<span id="cb2-6"><a href="#cb2-6"></a>nhefs.nmv<span class="sc">$</span>w <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> p.qsmk.obs</span>
-<span id="cb2-7"><a href="#cb2-7"></a></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="fu">summary</span>(nhefs.nmv<span class="sc">$</span>w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>p.qsmk.obs <span class="ot">&lt;-</span></span>
+<span id="cb2-2"><a href=""></a>  <span class="fu">ifelse</span>(nhefs.nmv<span class="sc">$</span>qsmk <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb2-3"><a href=""></a>         <span class="dv">1</span> <span class="sc">-</span> <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">"response"</span>),</span>
+<span id="cb2-4"><a href=""></a>         <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">"response"</span>))</span>
+<span id="cb2-5"><a href=""></a></span>
+<span id="cb2-6"><a href=""></a>nhefs.nmv<span class="sc">$</span>w <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> p.qsmk.obs</span>
+<span id="cb2-7"><a href=""></a></span>
+<span id="cb2-8"><a href=""></a><span class="fu">summary</span>(nhefs.nmv<span class="sc">$</span>w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
@@ -592,39 +593,38 @@ E[Y|A] = \theta_0 + \theta_1A
 <li><strong>Weighted Least Squares Model:</strong></li>
 </ol>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(<span class="st">"geepack"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a>msm.w <span class="ot">&lt;-</span> <span class="fu">geeglm</span>(</span>
-<span id="cb4-4"><a href="#cb4-4"></a>  wt82_71 <span class="sc">~</span> qsmk,</span>
-<span id="cb4-5"><a href="#cb4-5"></a>  <span class="at">data =</span> nhefs.nmv,</span>
-<span id="cb4-6"><a href="#cb4-6"></a>  <span class="at">weights =</span> w,</span>
-<span id="cb4-7"><a href="#cb4-7"></a>  <span class="at">id =</span> seqn,</span>
-<span id="cb4-8"><a href="#cb4-8"></a>  <span class="at">corstr =</span> <span class="st">"independence"</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>)</span>
-<span id="cb4-10"><a href="#cb4-10"></a></span>
-<span id="cb4-11"><a href="#cb4-11"></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(msm.w, <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">library</span>(<span class="st">"geepack"</span>)</span>
+<span id="cb4-2"><a href=""></a></span>
+<span id="cb4-3"><a href=""></a>msm.w <span class="ot">&lt;-</span> <span class="fu">geeglm</span>(</span>
+<span id="cb4-4"><a href=""></a>  wt82_71 <span class="sc">~</span> qsmk,</span>
+<span id="cb4-5"><a href=""></a>  <span class="at">data =</span> nhefs.nmv,</span>
+<span id="cb4-6"><a href=""></a>  <span class="at">weights =</span> w,</span>
+<span id="cb4-7"><a href=""></a>  <span class="at">id =</span> seqn,</span>
+<span id="cb4-8"><a href=""></a>  <span class="at">corstr =</span> <span class="st">"independence"</span></span>
+<span id="cb4-9"><a href=""></a>)</span>
+<span id="cb4-10"><a href=""></a></span>
+<span id="cb4-11"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(msm.w, <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-
-<div id="vkdtlacbne" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vkdtlacbne table {
+<div id="whqvgpvwmr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#whqvgpvwmr table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vkdtlacbne thead, #vkdtlacbne tbody, #vkdtlacbne tfoot, #vkdtlacbne tr, #vkdtlacbne td, #vkdtlacbne th {
+#whqvgpvwmr thead, #whqvgpvwmr tbody, #whqvgpvwmr tfoot, #whqvgpvwmr tr, #whqvgpvwmr td, #whqvgpvwmr th {
   border-style: none;
 }
 
-#vkdtlacbne p {
+#whqvgpvwmr p {
   margin: 0;
   padding: 0;
 }
 
-#vkdtlacbne .gt_table {
+#whqvgpvwmr .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -650,12 +650,12 @@ E[Y|A] = \theta_0 + \theta_1A
   border-left-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_caption {
+#whqvgpvwmr .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vkdtlacbne .gt_title {
+#whqvgpvwmr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -667,7 +667,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-width: 0;
 }
 
-#vkdtlacbne .gt_subtitle {
+#whqvgpvwmr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -679,7 +679,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-top-width: 0;
 }
 
-#vkdtlacbne .gt_heading {
+#whqvgpvwmr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -691,13 +691,13 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_bottom_border {
+#whqvgpvwmr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_col_headings {
+#whqvgpvwmr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -712,7 +712,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_col_heading {
+#whqvgpvwmr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -732,7 +732,7 @@ E[Y|A] = \theta_0 + \theta_1A
   overflow-x: hidden;
 }
 
-#vkdtlacbne .gt_column_spanner_outer {
+#whqvgpvwmr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -744,15 +744,15 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 4px;
 }
 
-#vkdtlacbne .gt_column_spanner_outer:first-child {
+#whqvgpvwmr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vkdtlacbne .gt_column_spanner_outer:last-child {
+#whqvgpvwmr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vkdtlacbne .gt_column_spanner {
+#whqvgpvwmr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -764,11 +764,11 @@ E[Y|A] = \theta_0 + \theta_1A
   width: 100%;
 }
 
-#vkdtlacbne .gt_spanner_row {
+#whqvgpvwmr .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vkdtlacbne .gt_group_heading {
+#whqvgpvwmr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -794,7 +794,7 @@ E[Y|A] = \theta_0 + \theta_1A
   text-align: left;
 }
 
-#vkdtlacbne .gt_empty_group_heading {
+#whqvgpvwmr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -809,15 +809,15 @@ E[Y|A] = \theta_0 + \theta_1A
   vertical-align: middle;
 }
 
-#vkdtlacbne .gt_from_md > :first-child {
+#whqvgpvwmr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vkdtlacbne .gt_from_md > :last-child {
+#whqvgpvwmr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vkdtlacbne .gt_row {
+#whqvgpvwmr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -836,7 +836,7 @@ E[Y|A] = \theta_0 + \theta_1A
   overflow-x: hidden;
 }
 
-#vkdtlacbne .gt_stub {
+#whqvgpvwmr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -849,7 +849,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#vkdtlacbne .gt_stub_row_group {
+#whqvgpvwmr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -863,15 +863,15 @@ E[Y|A] = \theta_0 + \theta_1A
   vertical-align: top;
 }
 
-#vkdtlacbne .gt_row_group_first td {
+#whqvgpvwmr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vkdtlacbne .gt_row_group_first th {
+#whqvgpvwmr .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vkdtlacbne .gt_summary_row {
+#whqvgpvwmr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -881,16 +881,16 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#vkdtlacbne .gt_first_summary_row {
+#whqvgpvwmr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_first_summary_row.thick {
+#whqvgpvwmr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vkdtlacbne .gt_last_summary_row {
+#whqvgpvwmr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -900,7 +900,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_grand_summary_row {
+#whqvgpvwmr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -910,7 +910,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#vkdtlacbne .gt_first_grand_summary_row {
+#whqvgpvwmr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -920,7 +920,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-top-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_last_grand_summary_row_top {
+#whqvgpvwmr .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -930,11 +930,11 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_striped {
+#whqvgpvwmr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vkdtlacbne .gt_table_body {
+#whqvgpvwmr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -943,7 +943,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_footnotes {
+#whqvgpvwmr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -957,7 +957,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_footnote {
+#whqvgpvwmr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -966,7 +966,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#vkdtlacbne .gt_sourcenotes {
+#whqvgpvwmr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -980,7 +980,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#vkdtlacbne .gt_sourcenote {
+#whqvgpvwmr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -988,132 +988,137 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#vkdtlacbne .gt_left {
+#whqvgpvwmr .gt_left {
   text-align: left;
 }
 
-#vkdtlacbne .gt_center {
+#whqvgpvwmr .gt_center {
   text-align: center;
 }
 
-#vkdtlacbne .gt_right {
+#whqvgpvwmr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vkdtlacbne .gt_font_normal {
+#whqvgpvwmr .gt_font_normal {
   font-weight: normal;
 }
 
-#vkdtlacbne .gt_font_bold {
+#whqvgpvwmr .gt_font_bold {
   font-weight: bold;
 }
 
-#vkdtlacbne .gt_font_italic {
+#whqvgpvwmr .gt_font_italic {
   font-style: italic;
 }
 
-#vkdtlacbne .gt_super {
+#whqvgpvwmr .gt_super {
   font-size: 65%;
 }
 
-#vkdtlacbne .gt_footnote_marks {
+#whqvgpvwmr .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vkdtlacbne .gt_asterisk {
+#whqvgpvwmr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vkdtlacbne .gt_indent_1 {
+#whqvgpvwmr .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vkdtlacbne .gt_indent_2 {
+#whqvgpvwmr .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vkdtlacbne .gt_indent_3 {
+#whqvgpvwmr .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vkdtlacbne .gt_indent_4 {
+#whqvgpvwmr .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vkdtlacbne .gt_indent_5 {
+#whqvgpvwmr .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Beta</strong>"><strong>Beta</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">(Intercept)</td>
-<td headers="estimate" class="gt_row gt_center">1.8</td>
-<td headers="ci" class="gt_row gt_center">1.3, 2.2</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">qsmk</td>
-<td headers="estimate" class="gt_row gt_center">3.4</td>
-<td headers="ci" class="gt_row gt_center">2.4, 4.5</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-  </tbody>
-  
-  <tfoot class="gt_footnotes">
-    <tr>
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> CI = Confidence Interval</td>
-    </tr>
-  </tfoot>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="<strong>Characteristic</strong>" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
+<th id="<strong>Beta</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Beta</strong></th>
+<th id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+<th id="<strong>p-value</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">(Intercept)</td>
+<td class="gt_row gt_center" headers="estimate">1.8</td>
+<td class="gt_row gt_center" headers="ci">1.3, 2.2</td>
+<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">qsmk</td>
+<td class="gt_row gt_center" headers="estimate">3.4</td>
+<td class="gt_row gt_center" headers="ci">2.4, 4.5</td>
+<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="4" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> CI = Confidence Interval</td>
+</tr>
+</tfoot>
+
 </table>
+
 </div>
 </div>
 </div>
 </section>
-<section id="iwp-example-stabilized-weights" class="slide level2 smaller">
+<section id="iwp-example-stabilized-weights" class="slide level2 smaller scrollable">
 <h2>IWP: Example (Stabilized weights)</h2>
 <ol type="1">
 <li><strong>Estimate Propensity Score:</strong> Using logistic regression</li>
 </ol>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>denom.fit <span class="ot">&lt;-</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">glm</span>(</span>
-<span id="cb5-3"><a href="#cb5-3"></a>    qsmk <span class="sc">~</span> <span class="fu">as.factor</span>(sex) <span class="sc">+</span> <span class="fu">as.factor</span>(race) <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>      <span class="fu">as.factor</span>(education) <span class="sc">+</span> smokeintensity <span class="sc">+</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a>      <span class="fu">I</span>(smokeintensity <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span> smokeyrs <span class="sc">+</span> <span class="fu">I</span>(smokeyrs <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a>      <span class="fu">as.factor</span>(exercise) <span class="sc">+</span> <span class="fu">as.factor</span>(active) <span class="sc">+</span> wt71 <span class="sc">+</span> <span class="fu">I</span>(wt71 <span class="sc">^</span> <span class="dv">2</span>),</span>
-<span id="cb5-7"><a href="#cb5-7"></a>    <span class="at">family =</span> <span class="fu">binomial</span>(),</span>
-<span id="cb5-8"><a href="#cb5-8"></a>    <span class="at">data =</span> nhefs.nmv</span>
-<span id="cb5-9"><a href="#cb5-9"></a>  )</span>
-<span id="cb5-10"><a href="#cb5-10"></a></span>
-<span id="cb5-11"><a href="#cb5-11"></a>pd.qsmk <span class="ot">&lt;-</span> <span class="fu">predict</span>(denom.fit, <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>denom.fit <span class="ot">&lt;-</span></span>
+<span id="cb5-2"><a href=""></a>  <span class="fu">glm</span>(</span>
+<span id="cb5-3"><a href=""></a>    qsmk <span class="sc">~</span> <span class="fu">as.factor</span>(sex) <span class="sc">+</span> <span class="fu">as.factor</span>(race) <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb5-4"><a href=""></a>      <span class="fu">as.factor</span>(education) <span class="sc">+</span> smokeintensity <span class="sc">+</span></span>
+<span id="cb5-5"><a href=""></a>      <span class="fu">I</span>(smokeintensity <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span> smokeyrs <span class="sc">+</span> <span class="fu">I</span>(smokeyrs <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb5-6"><a href=""></a>      <span class="fu">as.factor</span>(exercise) <span class="sc">+</span> <span class="fu">as.factor</span>(active) <span class="sc">+</span> wt71 <span class="sc">+</span> <span class="fu">I</span>(wt71 <span class="sc">^</span> <span class="dv">2</span>),</span>
+<span id="cb5-7"><a href=""></a>    <span class="at">family =</span> <span class="fu">binomial</span>(),</span>
+<span id="cb5-8"><a href=""></a>    <span class="at">data =</span> nhefs.nmv</span>
+<span id="cb5-9"><a href=""></a>  )</span>
+<span id="cb5-10"><a href=""></a></span>
+<span id="cb5-11"><a href=""></a>pd.qsmk <span class="ot">&lt;-</span> <span class="fu">predict</span>(denom.fit, <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <ol start="2" type="1">
 <li><strong>Calculate Weights:</strong> Stabilized weights</li>
 </ol>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>numer.fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(qsmk <span class="sc">~</span> <span class="dv">1</span>, <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">data =</span> nhefs.nmv)</span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a>pn.qsmk <span class="ot">&lt;-</span> <span class="fu">predict</span>(numer.fit, <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb6-4"><a href="#cb6-4"></a></span>
-<span id="cb6-5"><a href="#cb6-5"></a>nhefs.nmv<span class="sc">$</span>sw <span class="ot">&lt;-</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">ifelse</span>(nhefs.nmv<span class="sc">$</span>qsmk <span class="sc">==</span> <span class="dv">0</span>, ((<span class="dv">1</span> <span class="sc">-</span> pn.qsmk) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> pd.qsmk)),</span>
-<span id="cb6-7"><a href="#cb6-7"></a>         (pn.qsmk <span class="sc">/</span> pd.qsmk))</span>
-<span id="cb6-8"><a href="#cb6-8"></a></span>
-<span id="cb6-9"><a href="#cb6-9"></a><span class="fu">summary</span>(nhefs.nmv<span class="sc">$</span>sw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>numer.fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(qsmk <span class="sc">~</span> <span class="dv">1</span>, <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">data =</span> nhefs.nmv)</span>
+<span id="cb6-2"><a href=""></a></span>
+<span id="cb6-3"><a href=""></a>pn.qsmk <span class="ot">&lt;-</span> <span class="fu">predict</span>(numer.fit, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb6-4"><a href=""></a></span>
+<span id="cb6-5"><a href=""></a>nhefs.nmv<span class="sc">$</span>sw <span class="ot">&lt;-</span></span>
+<span id="cb6-6"><a href=""></a>  <span class="fu">ifelse</span>(nhefs.nmv<span class="sc">$</span>qsmk <span class="sc">==</span> <span class="dv">0</span>, ((<span class="dv">1</span> <span class="sc">-</span> pn.qsmk) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> pd.qsmk)),</span>
+<span id="cb6-7"><a href=""></a>         (pn.qsmk <span class="sc">/</span> pd.qsmk))</span>
+<span id="cb6-8"><a href=""></a></span>
+<span id="cb6-9"><a href=""></a><span class="fu">summary</span>(nhefs.nmv<span class="sc">$</span>sw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
@@ -1124,37 +1129,36 @@ E[Y|A] = \theta_0 + \theta_1A
 <li><strong>Weighted Least Squares Model:</strong></li>
 </ol>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>msm.sw <span class="ot">&lt;-</span> <span class="fu">geeglm</span>(</span>
-<span id="cb8-2"><a href="#cb8-2"></a>  wt82_71 <span class="sc">~</span> qsmk,</span>
-<span id="cb8-3"><a href="#cb8-3"></a>  <span class="at">data =</span> nhefs.nmv,</span>
-<span id="cb8-4"><a href="#cb8-4"></a>  <span class="at">weights =</span> sw,</span>
-<span id="cb8-5"><a href="#cb8-5"></a>  <span class="at">id =</span> seqn,</span>
-<span id="cb8-6"><a href="#cb8-6"></a>  <span class="at">corstr =</span> <span class="st">"independence"</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a>)</span>
-<span id="cb8-8"><a href="#cb8-8"></a></span>
-<span id="cb8-9"><a href="#cb8-9"></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(msm.sw, <span class="at">intercept=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>msm.sw <span class="ot">&lt;-</span> <span class="fu">geeglm</span>(</span>
+<span id="cb8-2"><a href=""></a>  wt82_71 <span class="sc">~</span> qsmk,</span>
+<span id="cb8-3"><a href=""></a>  <span class="at">data =</span> nhefs.nmv,</span>
+<span id="cb8-4"><a href=""></a>  <span class="at">weights =</span> sw,</span>
+<span id="cb8-5"><a href=""></a>  <span class="at">id =</span> seqn,</span>
+<span id="cb8-6"><a href=""></a>  <span class="at">corstr =</span> <span class="st">"independence"</span></span>
+<span id="cb8-7"><a href=""></a>)</span>
+<span id="cb8-8"><a href=""></a></span>
+<span id="cb8-9"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(msm.sw, <span class="at">intercept=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-
-<div id="zklhuwnegs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zklhuwnegs table {
+<div id="yzmrpzqywh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yzmrpzqywh table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zklhuwnegs thead, #zklhuwnegs tbody, #zklhuwnegs tfoot, #zklhuwnegs tr, #zklhuwnegs td, #zklhuwnegs th {
+#yzmrpzqywh thead, #yzmrpzqywh tbody, #yzmrpzqywh tfoot, #yzmrpzqywh tr, #yzmrpzqywh td, #yzmrpzqywh th {
   border-style: none;
 }
 
-#zklhuwnegs p {
+#yzmrpzqywh p {
   margin: 0;
   padding: 0;
 }
 
-#zklhuwnegs .gt_table {
+#yzmrpzqywh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1180,12 +1184,12 @@ E[Y|A] = \theta_0 + \theta_1A
   border-left-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_caption {
+#yzmrpzqywh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zklhuwnegs .gt_title {
+#yzmrpzqywh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1197,7 +1201,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-width: 0;
 }
 
-#zklhuwnegs .gt_subtitle {
+#yzmrpzqywh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1209,7 +1213,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-top-width: 0;
 }
 
-#zklhuwnegs .gt_heading {
+#yzmrpzqywh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1221,13 +1225,13 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_bottom_border {
+#yzmrpzqywh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_col_headings {
+#yzmrpzqywh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1242,7 +1246,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_col_heading {
+#yzmrpzqywh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1262,7 +1266,7 @@ E[Y|A] = \theta_0 + \theta_1A
   overflow-x: hidden;
 }
 
-#zklhuwnegs .gt_column_spanner_outer {
+#yzmrpzqywh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1274,15 +1278,15 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 4px;
 }
 
-#zklhuwnegs .gt_column_spanner_outer:first-child {
+#yzmrpzqywh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zklhuwnegs .gt_column_spanner_outer:last-child {
+#yzmrpzqywh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zklhuwnegs .gt_column_spanner {
+#yzmrpzqywh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1294,11 +1298,11 @@ E[Y|A] = \theta_0 + \theta_1A
   width: 100%;
 }
 
-#zklhuwnegs .gt_spanner_row {
+#yzmrpzqywh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zklhuwnegs .gt_group_heading {
+#yzmrpzqywh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1324,7 +1328,7 @@ E[Y|A] = \theta_0 + \theta_1A
   text-align: left;
 }
 
-#zklhuwnegs .gt_empty_group_heading {
+#yzmrpzqywh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1339,15 +1343,15 @@ E[Y|A] = \theta_0 + \theta_1A
   vertical-align: middle;
 }
 
-#zklhuwnegs .gt_from_md > :first-child {
+#yzmrpzqywh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zklhuwnegs .gt_from_md > :last-child {
+#yzmrpzqywh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zklhuwnegs .gt_row {
+#yzmrpzqywh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1366,7 +1370,7 @@ E[Y|A] = \theta_0 + \theta_1A
   overflow-x: hidden;
 }
 
-#zklhuwnegs .gt_stub {
+#yzmrpzqywh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1379,7 +1383,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#zklhuwnegs .gt_stub_row_group {
+#yzmrpzqywh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1393,15 +1397,15 @@ E[Y|A] = \theta_0 + \theta_1A
   vertical-align: top;
 }
 
-#zklhuwnegs .gt_row_group_first td {
+#yzmrpzqywh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zklhuwnegs .gt_row_group_first th {
+#yzmrpzqywh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zklhuwnegs .gt_summary_row {
+#yzmrpzqywh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1411,16 +1415,16 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#zklhuwnegs .gt_first_summary_row {
+#yzmrpzqywh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_first_summary_row.thick {
+#yzmrpzqywh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zklhuwnegs .gt_last_summary_row {
+#yzmrpzqywh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1430,7 +1434,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_grand_summary_row {
+#yzmrpzqywh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1440,7 +1444,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#zklhuwnegs .gt_first_grand_summary_row {
+#yzmrpzqywh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1450,7 +1454,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-top-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_last_grand_summary_row_top {
+#yzmrpzqywh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1460,11 +1464,11 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_striped {
+#yzmrpzqywh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zklhuwnegs .gt_table_body {
+#yzmrpzqywh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1473,7 +1477,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_footnotes {
+#yzmrpzqywh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1487,7 +1491,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_footnote {
+#yzmrpzqywh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1496,7 +1500,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#zklhuwnegs .gt_sourcenotes {
+#yzmrpzqywh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1510,7 +1514,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#zklhuwnegs .gt_sourcenote {
+#yzmrpzqywh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1518,92 +1522,97 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#zklhuwnegs .gt_left {
+#yzmrpzqywh .gt_left {
   text-align: left;
 }
 
-#zklhuwnegs .gt_center {
+#yzmrpzqywh .gt_center {
   text-align: center;
 }
 
-#zklhuwnegs .gt_right {
+#yzmrpzqywh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zklhuwnegs .gt_font_normal {
+#yzmrpzqywh .gt_font_normal {
   font-weight: normal;
 }
 
-#zklhuwnegs .gt_font_bold {
+#yzmrpzqywh .gt_font_bold {
   font-weight: bold;
 }
 
-#zklhuwnegs .gt_font_italic {
+#yzmrpzqywh .gt_font_italic {
   font-style: italic;
 }
 
-#zklhuwnegs .gt_super {
+#yzmrpzqywh .gt_super {
   font-size: 65%;
 }
 
-#zklhuwnegs .gt_footnote_marks {
+#yzmrpzqywh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zklhuwnegs .gt_asterisk {
+#yzmrpzqywh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zklhuwnegs .gt_indent_1 {
+#yzmrpzqywh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zklhuwnegs .gt_indent_2 {
+#yzmrpzqywh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zklhuwnegs .gt_indent_3 {
+#yzmrpzqywh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zklhuwnegs .gt_indent_4 {
+#yzmrpzqywh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zklhuwnegs .gt_indent_5 {
+#yzmrpzqywh .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Beta</strong>"><strong>Beta</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">(Intercept)</td>
-<td headers="estimate" class="gt_row gt_center">1.8</td>
-<td headers="ci" class="gt_row gt_center">1.3, 2.2</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">qsmk</td>
-<td headers="estimate" class="gt_row gt_center">3.4</td>
-<td headers="ci" class="gt_row gt_center">2.4, 4.5</td>
-<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
-  </tbody>
-  
-  <tfoot class="gt_footnotes">
-    <tr>
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> CI = Confidence Interval</td>
-    </tr>
-  </tfoot>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_col_headings">
+<th id="<strong>Characteristic</strong>" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
+<th id="<strong>Beta</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Beta</strong></th>
+<th id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+<th id="<strong>p-value</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">(Intercept)</td>
+<td class="gt_row gt_center" headers="estimate">1.8</td>
+<td class="gt_row gt_center" headers="ci">1.3, 2.2</td>
+<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">qsmk</td>
+<td class="gt_row gt_center" headers="estimate">3.4</td>
+<td class="gt_row gt_center" headers="ci">2.4, 4.5</td>
+<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="4" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> CI = Confidence Interval</td>
+</tr>
+</tfoot>
+
 </table>
+
 </div>
 </div>
 </div>
@@ -1621,16 +1630,16 @@ E[Y|A] = \theta_0 + \theta_1A
 </ul>
 </section></section>
 <section>
-<section id="marginal-structural-models" class="title-slide slide level1 center">
-<h1>Marginal Structural Models</h1>
+<section id="marginal-structural-models-msms" class="title-slide slide level1 center">
+<h1>Marginal Structural Models (MSMs)</h1>
 
 </section>
 <section id="how-about-an-xkcd-comic" class="slide level2">
 <h2>How about an XKCD comic?</h2>
 
 <img data-src="msm-comic.png" width="80" class="r-stretch quarto-figure-center"><p class="caption">AI Generated xkcd comic</p></section>
-<section id="marginal-structural-models-msms-overview" class="slide level2">
-<h2>Marginal Structural Models (MSMs): Overview</h2>
+<section id="msms-overview" class="slide level2">
+<h2>MSMs: Overview</h2>
 <ul>
 <li>Developed to handle <strong>continuous treatments</strong>.</li>
 <li>Combine <strong>IPW</strong> and <strong>structural models</strong> to estimate causal effects.</li>
@@ -1643,103 +1652,804 @@ E[Y^a] = \beta_0 + \beta_1a
 <p>Models for the marginal mean of a counterfactual outcome are referred to as <em>marginal structural mean models</em></p>
 </div>
 </section>
-<section id="msms-example" class="slide level2">
-<h2>MSMs: Example</h2>
-<ol type="1">
-<li><p><strong>Step 1: Calculate Stabilized Weights</strong> <span class="math display">\[
-SW = \frac{P(Treatment)}{P(Treatment \mid Confounders)}
-\]</span> These weights are used to reduce variance while accounting for confounding.</p></li>
-<li><p><strong>Step 2: Fit MSM</strong> <span class="math display">\[
-Y = \beta_0 + \beta_1 \times Treatment
-\]</span> Weighted regression with <strong>stabilized weights</strong>.</p></li>
-</ol>
-</section>
-<section id="msms-key-strengths" class="slide level2">
-<h2>MSMs: Key Strengths</h2>
+<section id="msms-for-dichotomous-treatments" class="slide level2">
+<h2>MSMs: For Dichotomous treatments</h2>
 <ul>
-<li><strong>Handles time-varying treatments</strong> and confounders.</li>
-<li>Suitable for longitudinal data and <strong>dynamic treatment regimes</strong>.</li>
-<li>Can capture <strong>causal effects</strong> that change over time.</li>
+<li>Recall the example from IP-weighting, there are only two treatments</li>
+<li>In this case, the MSM <span class="math inline">\(E[Y^a] = \beta_0 + \beta_1a\)</span> is saturated
+<ul>
+<li>The model has 2 unknowns on both sides,</li>
+<li><span class="math inline">\(E[Y^{A=1}]\)</span> and <span class="math inline">\(E[Y^{A=0}]\)</span> on the left and <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> on the right</li>
+</ul></li>
+<li>Therefore, using the pseudo-population sample averages estimate the causal effect</li>
 </ul>
 </section>
-<section id="comparing-methods" class="slide level2 smaller">
-<h2>Comparing Methods</h2>
-<table>
-<colgroup>
-<col style="width: 15%">
-<col style="width: 25%">
-<col style="width: 30%">
-<col style="width: 28%">
-</colgroup>
+<section id="msms-for-continuous-treatment" class="slide level2">
+<h2>MSMs: For continuous treatment</h2>
+<ul>
+<li>Suppose now we consider the treatment <em>Change in smoking intensity</em>
+<ul>
+<li>Now the treatment <span class="math inline">\(A\)</span> can take on values (-80, 50)</li>
+</ul></li>
+<li>Now we are interested in estimating <span class="math inline">\(E[Y^a] - E[Y^{a^{\prime}}]\)</span> for any values of <span class="math inline">\(a\)</span> and <span class="math inline">\(a^{\prime}\)</span></li>
+<li>A saturated model no longer makes sense with so many values of <span class="math inline">\(A\)</span>
+<ul>
+<li>Using a non-saturated model to specify the dose response curve for the treatment effect</li>
+</ul></li>
+<li>Potential to model with non-linear models, <span class="math display">\[
+E[Y^a] = \beta_0 + \beta_1 a + \beta_2 a^2
+\]</span></li>
+</ul>
+</section>
+<section id="msms-continuous-treatment-effect" class="slide level2">
+<h2>MSMs: continuous treatment effect</h2>
+<ul>
+<li>Suppose we are interested in estimating the causal effect of increasing smoking intensity by 20 cigarettes per day compared to no change <span class="math display">\[
+E[Y^{a = 20}] - E[Y^{a = 0}]
+\]</span></li>
+<li>Using the parabolic model <span class="math display">\[\begin{align*}
+E[Y^{a = 20}] &amp;= \beta_0 + 20 \beta_1 + 400 \beta_2 \\
+E[Y^{a = 0}] &amp;= \beta_0
+\end{align*}\]</span></li>
+<li>How can we estimate <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>?</li>
+</ul>
+<aside class="notes">
+<p>Write out the difference in terms of regression model differences.</p>
+<p><span class="math inline">\(\beta_0 + 20 \beta_1 + 400 \beta_2 - \beta_0 = 20 \beta_1 + 400 \beta_2\)</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="msms-estimation" class="slide level2 scrollable">
+<h2>MSMs: Estimation</h2>
+<p>Estimate using IP weighting!</p>
+<ol type="1">
+<li>Estimate IP weights <span class="math inline">\(\operatorname{SW}^A\)</span> to create pseudo-population with no confounding from <span class="math inline">\(L\)</span></li>
+<li>Fit the associational model <span class="math inline">\(E[Y|A] = \theta_0 + \theta_1 A + \theta_2 A^2\)</span></li>
+<li>Use the pseudo-population estimates <span class="math inline">\(\theta_1\)</span> and <span class="math inline">\(\theta_2\)</span> as estimates of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span></li>
+</ol>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>IP estimation in continuous treatments</strong></p>
+</div>
+<div class="callout-content">
+<p>To estimate the stabilized weights <span class="math inline">\(\operatorname{SW}^A\)</span>, we need to estimate <span class="math inline">\(f(A|L)\)</span>. For continuous treatments <span class="math inline">\(A\)</span>, <span class="math inline">\(f(A|L)\)</span> is a probability density function.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="continuous-ip-weights-estimation" class="slide level2">
+<h2>Continuous IP weights estimation</h2>
+<ul>
+<li>Generalized Propensity Score (GPS)</li>
+<li>Kernel Density Estimators (KDE-IPW)</li>
+<li>Machine Learning-Based GPS (ML-GPS)</li>
+<li>Bayesian Methods for GPS</li>
+</ul>
+</section>
+<section id="generalized-propensity-scores-gps" class="slide level2">
+<h2>Generalized Propensity Scores (GPS)</h2>
+<ul>
+<li>GPS is the conditional probability of receiving a particular level of treatment/exposure given observed baseline covariates</li>
+<li>GPS is a balancing score: conditional on the propensity function</li>
+<li>In our example we have values from -80 to 50 for change in smoking intensity
+<ul>
+<li>Model with normal logistic regression or GAM</li>
+<li>Depending on the possible values of treatment we may use a different model</li>
+</ul></li>
+</ul>
+</section>
+<section id="kde-ipw" class="slide level2">
+<h2>KDE-IPW</h2>
+<ul>
+<li>Non-parametric IPW method</li>
+<li>KDE is used to approximate the probability density of receiving a specific treatment value, conditional on confounders</li>
+<li>Stabilized weights are then calculated using the marginal density of the treated and conditional density estimate</li>
+<li>Sensitive to choice of bandwidth and may struggle with high-dimensional confounders</li>
+</ul>
+</section>
+<section id="ml-gps" class="slide level2">
+<h2>ML-GPS</h2>
+<ul>
+<li>Non-parametric method of GPS</li>
+<li>Leverage machine learning methods to model the treatment assignment
+<ul>
+<li>Gradient Boosting</li>
+<li>Random Forest</li>
+<li>Neural Network</li>
+</ul></li>
+<li>Stabilized weights are calculated by dividing the marginal treatment density by the ML-predicted density conditional on confounders</li>
+<li>ML methods may require large sample sizes to avoid over fitting</li>
+</ul>
+</section>
+<section id="bayesian-methods-for-gps" class="slide level2">
+<h2>Bayesian Methods for GPS</h2>
+<ul>
+<li>Using Bayesian methods, prior information is incorporated over parameters in the GPS model</li>
+<li>Hierarchical models can be used to account for varying levels of confounding over treatment levels</li>
+<li>Can be computationally expensive</li>
+</ul>
+</section>
+<section id="msms-example" class="slide level2 scrollable">
+<h2>MSMs: Example</h2>
+<ol type="1">
+<li>Fit GPS model (Linear regression)</li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>nhefs.nmv.s <span class="ot">&lt;-</span> <span class="fu">subset</span>(nhefs.nmv, smokeintensity <span class="sc">&lt;=</span> <span class="dv">25</span>)</span>
+<span id="cb9-2"><a href=""></a></span>
+<span id="cb9-3"><a href=""></a><span class="co"># estimation of denominator of ip weights</span></span>
+<span id="cb9-4"><a href=""></a>den.fit.obj <span class="ot">&lt;-</span> <span class="fu">lm</span>(</span>
+<span id="cb9-5"><a href=""></a>  smkintensity82_71 <span class="sc">~</span> <span class="fu">as.factor</span>(sex) <span class="sc">+</span></span>
+<span id="cb9-6"><a href=""></a>    <span class="fu">as.factor</span>(race) <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb9-7"><a href=""></a>    <span class="fu">as.factor</span>(education) <span class="sc">+</span> smokeintensity <span class="sc">+</span> <span class="fu">I</span>(smokeintensity <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb9-8"><a href=""></a>    smokeyrs <span class="sc">+</span> <span class="fu">I</span>(smokeyrs <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span> <span class="fu">as.factor</span>(exercise) <span class="sc">+</span> <span class="fu">as.factor</span>(active) <span class="sc">+</span> wt71 <span class="sc">+</span></span>
+<span id="cb9-9"><a href=""></a>    <span class="fu">I</span>(wt71 <span class="sc">^</span> <span class="dv">2</span>),</span>
+<span id="cb9-10"><a href=""></a>  <span class="at">data =</span> nhefs.nmv.s</span>
+<span id="cb9-11"><a href=""></a>)</span>
+<span id="cb9-12"><a href=""></a>p.den <span class="ot">&lt;-</span> <span class="fu">predict</span>(den.fit.obj, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb9-13"><a href=""></a>dens.den <span class="ot">&lt;-</span></span>
+<span id="cb9-14"><a href=""></a>  <span class="fu">dnorm</span>(nhefs.nmv.s<span class="sc">$</span>smkintensity82_71,</span>
+<span id="cb9-15"><a href=""></a>        p.den,</span>
+<span id="cb9-16"><a href=""></a>        <span class="fu">summary</span>(den.fit.obj)<span class="sc">$</span>sigma)</span>
+<span id="cb9-17"><a href=""></a></span>
+<span id="cb9-18"><a href=""></a></span>
+<span id="cb9-19"><a href=""></a></span>
+<span id="cb9-20"><a href=""></a><span class="co"># estimation of numerator of ip weights</span></span>
+<span id="cb9-21"><a href=""></a>num.fit.obj <span class="ot">&lt;-</span> <span class="fu">lm</span>(smkintensity82_71 <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> nhefs.nmv.s)</span>
+<span id="cb9-22"><a href=""></a>p.num <span class="ot">&lt;-</span> <span class="fu">predict</span>(num.fit.obj, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb9-23"><a href=""></a>dens.num <span class="ot">&lt;-</span></span>
+<span id="cb9-24"><a href=""></a>  <span class="fu">dnorm</span>(nhefs.nmv.s<span class="sc">$</span>smkintensity82_71,</span>
+<span id="cb9-25"><a href=""></a>        p.num,</span>
+<span id="cb9-26"><a href=""></a>        <span class="fu">summary</span>(num.fit.obj)<span class="sc">$</span>sigma)</span>
+<span id="cb9-27"><a href=""></a></span>
+<span id="cb9-28"><a href=""></a>nhefs.nmv.s<span class="sc">$</span>sw.a <span class="ot">&lt;-</span> dens.num <span class="sc">/</span> dens.den</span>
+<span id="cb9-29"><a href=""></a></span>
+<span id="cb9-30"><a href=""></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb9-31"><a href=""></a><span class="fu">plot</span>(den.fit.obj, <span class="at">which =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">"Denominator Q-Q"</span>)</span>
+<span id="cb9-32"><a href=""></a><span class="fu">plot</span>(num.fit.obj, <span class="at">which =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">"Numerator Q-Q"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+
+</div>
+<img data-src="IPW-MSM_slides_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Stabilized weight residuals</p></section>
+<section id="msms-example-1" class="slide level2 scrollable">
+<h2>MSMs: Example</h2>
+<ol start="2" type="1">
+<li>Fit Model on <span class="math inline">\(\operatorname{SW}^A\)</span></li>
+</ol>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb10-2"><a href=""></a><span class="co"># model built on pseudo-population</span></span>
+<span id="cb10-3"><a href=""></a>msm.sw.cont <span class="ot">&lt;-</span></span>
+<span id="cb10-4"><a href=""></a>  <span class="fu">geeglm</span>(</span>
+<span id="cb10-5"><a href=""></a>    wt82_71 <span class="sc">~</span> smkintensity82_71 <span class="sc">+</span> <span class="fu">I</span>(smkintensity82_71 <span class="sc">*</span> smkintensity82_71),</span>
+<span id="cb10-6"><a href=""></a>    <span class="at">data =</span> nhefs.nmv.s,</span>
+<span id="cb10-7"><a href=""></a>    <span class="at">weights =</span> sw.a,</span>
+<span id="cb10-8"><a href=""></a>    <span class="at">id =</span> seqn,</span>
+<span id="cb10-9"><a href=""></a>    <span class="at">corstr =</span> <span class="st">"independence"</span></span>
+<span id="cb10-10"><a href=""></a>  )</span>
+<span id="cb10-11"><a href=""></a></span>
+<span id="cb10-12"><a href=""></a>beta <span class="ot">&lt;-</span> <span class="fu">coef</span>(msm.sw.cont)</span>
+<span id="cb10-13"><a href=""></a>SE <span class="ot">&lt;-</span> <span class="fu">coef</span>(<span class="fu">summary</span>(msm.sw.cont))[, <span class="dv">2</span>]</span>
+<span id="cb10-14"><a href=""></a>lcl <span class="ot">&lt;-</span> beta <span class="sc">-</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> SE</span>
+<span id="cb10-15"><a href=""></a>ucl <span class="ot">&lt;-</span> beta <span class="sc">+</span> <span class="fu">qnorm</span>(<span class="fl">0.975</span>) <span class="sc">*</span> SE</span>
+<span id="cb10-16"><a href=""></a>nam <span class="ot">&lt;-</span> <span class="fu">names</span>(beta)</span>
+<span id="cb10-17"><a href=""></a></span>
+<span id="cb10-18"><a href=""></a><span class="fu">cbind</span>(beta, lcl, ucl) <span class="sc">|&gt;</span> </span>
+<span id="cb10-19"><a href=""></a><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb10-20"><a href=""></a><span class="fu">mutate</span>(<span class="at">coefficients =</span> nam) <span class="sc">|&gt;</span> </span>
+<span id="cb10-21"><a href=""></a><span class="fu">relocate</span>(coefficients) <span class="sc">|&gt;</span> </span>
+<span id="cb10-22"><a href=""></a>gt<span class="sc">::</span><span class="fu">gt</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb10-23"><a href=""></a>gt<span class="sc">::</span><span class="fu">fmt_number</span>(<span class="at">decimal =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="sarmxfblmp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#sarmxfblmp table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#sarmxfblmp thead, #sarmxfblmp tbody, #sarmxfblmp tfoot, #sarmxfblmp tr, #sarmxfblmp td, #sarmxfblmp th {
+  border-style: none;
+}
+
+#sarmxfblmp p {
+  margin: 0;
+  padding: 0;
+}
+
+#sarmxfblmp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#sarmxfblmp .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#sarmxfblmp .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#sarmxfblmp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#sarmxfblmp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#sarmxfblmp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#sarmxfblmp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#sarmxfblmp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#sarmxfblmp .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#sarmxfblmp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#sarmxfblmp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#sarmxfblmp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#sarmxfblmp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#sarmxfblmp .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#sarmxfblmp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sarmxfblmp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#sarmxfblmp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#sarmxfblmp .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#sarmxfblmp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sarmxfblmp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#sarmxfblmp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sarmxfblmp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#sarmxfblmp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sarmxfblmp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sarmxfblmp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sarmxfblmp .gt_left {
+  text-align: left;
+}
+
+#sarmxfblmp .gt_center {
+  text-align: center;
+}
+
+#sarmxfblmp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#sarmxfblmp .gt_font_normal {
+  font-weight: normal;
+}
+
+#sarmxfblmp .gt_font_bold {
+  font-weight: bold;
+}
+
+#sarmxfblmp .gt_font_italic {
+  font-style: italic;
+}
+
+#sarmxfblmp .gt_super {
+  font-size: 65%;
+}
+
+#sarmxfblmp .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#sarmxfblmp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#sarmxfblmp .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#sarmxfblmp .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#sarmxfblmp .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#sarmxfblmp .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#sarmxfblmp .gt_indent_5 {
+  text-indent: 25px;
+}
+</style>
+
+<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="header">
-<th>Method</th>
-<th>Key Idea</th>
-<th>Pros</th>
-<th>Cons</th>
+<tr class="header gt_col_headings">
+<th id="coefficients" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">coefficients</th>
+<th id="beta" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">beta</th>
+<th id="lcl" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">lcl</th>
+<th id="ucl" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">ucl</th>
 </tr>
 </thead>
-<tbody>
+<tbody class="gt_table_body">
 <tr class="odd">
-<td><strong>G-computation</strong></td>
-<td>Model counterfactual outcomes</td>
-<td>Directly estimates effects</td>
-<td>Model misspecification is critical</td>
+<td class="gt_row gt_left" headers="coefficients">(Intercept)</td>
+<td class="gt_row gt_right" headers="beta">2.005</td>
+<td class="gt_row gt_right" headers="lcl">1.426</td>
+<td class="gt_row gt_right" headers="ucl">2.583</td>
 </tr>
 <tr class="even">
-<td><strong>IP-weighting</strong></td>
-<td>Re-weight to balance confounders</td>
-<td>Avoids modeling the outcome</td>
-<td>Sensitive to extreme weights</td>
+<td class="gt_row gt_left" headers="coefficients">smkintensity82_71</td>
+<td class="gt_row gt_right" headers="beta">−0.109</td>
+<td class="gt_row gt_right" headers="lcl">−0.171</td>
+<td class="gt_row gt_right" headers="ucl">−0.047</td>
 </tr>
 <tr class="odd">
-<td><strong>MSMs</strong></td>
-<td>Combine IPW with structural models</td>
-<td>Handles time-varying treatments</td>
-<td>Complex to implement, requires weights</td>
+<td class="gt_row gt_left" headers="coefficients">I(smkintensity82_71 * smkintensity82_71)</td>
+<td class="gt_row gt_right" headers="beta">0.003</td>
+<td class="gt_row gt_right" headers="lcl">−0.002</td>
+<td class="gt_row gt_right" headers="ucl">0.007</td>
 </tr>
 </tbody>
 </table>
+
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Estimate causal effect</li>
+</ol>
+<p><span class="math display">\[
+E[Y^{a = 20}] - E[Y^{a = 0}] = 0.9 - 2.0 = -1.1
+\]</span></p>
+</section></section>
+<section>
+<section id="time-varying-confounders-and-msms" class="title-slide slide level1 center">
+<h1>Time-Varying Confounders and MSMs</h1>
+
 </section>
-<section id="conclusion" class="slide level2">
-<h2>Conclusion</h2>
+<section id="time-varying-confounders-in-longitudinal-studies" class="slide level2 scrollable">
+<h2>Time-Varying Confounders in Longitudinal Studies</h2>
 <ul>
-<li><strong>G-computation</strong>: Direct modeling of potential outcomes.</li>
-<li><strong>IP-weighting</strong>: Uses weights to adjust for confounders.</li>
-<li><strong>MSMs</strong>: Combines IP-weighting and models for complex settings.</li>
-<li>Choosing the right method depends on the context (e.g., time-varying treatments, data structure).</li>
+<li><strong>Definition</strong>: A time-varying confounder is a variable that:
+<ol type="1">
+<li>Changes over time.</li>
+<li>Affects both the treatment assignment and the outcome.</li>
+<li>Can itself be influenced by prior treatment.</li>
+</ol></li>
+</ul>
+<p><em>These confounders complicate causal estimation in longitudinal settings.</em></p>
+</section>
+<section id="why-time-varying-confounders-are-challenging" class="slide level2">
+<h2>Why Time-Varying Confounders are Challenging</h2>
+<ul>
+<li>Bias in Standard Models</li>
+<li>Feedback Loops
+<ul>
+<li>When confounders are affected by prior treatment, a feedback loop can form</li>
+</ul></li>
+<li><strong>Goal</strong>: Estimate causal effects in a way that addresses this confounding over time.</li>
+</ul>
+<p><em>Marginal Structural Models (MSMs) with IP weighting help handle time-varying confounding.</em></p>
+</section>
+<section id="msms-for-time-varying-confounding" class="slide level2 scrollable">
+<h2>MSMs for Time-Varying Confounding</h2>
+<ul>
+<li>MSMs combined with IP weighting are used to adjust for time-varying confounders.</li>
+</ul>
+<ol type="1">
+<li>Construct weights at each time point</li>
+<li>The time-varying confounders in the resulting pseudo-population no longer bias treatment</li>
+</ol>
+<ul>
+<li>In the pseudo-population, treatment is effectively randomized with respect to time-varying confounders.</li>
+</ul>
+<p><em>This approach allows for causal inference in studies with dynamic confounding over time.</em></p>
+<aside class="notes">
+<ol type="1">
+<li>to account for the probability of treatment given past confounder values and treatment history.</li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="wrap-up" class="slide level2">
+<h2>Wrap-up</h2>
+<ul>
+<li><strong>IP-weighting</strong>: Uses weights to adjust for confounders by creating a pseudo-population.
+<ul>
+<li><strong>Stabilized weights</strong>: correct for study population size.</li>
+</ul></li>
+<li><strong>MSMs</strong>: Combines IP-weighting and models for counterfactual outcomes.</li>
+<li>Choosing the right method depends on the context.
+<ul>
+<li>Type of treatment (Continuous, Dichotomous, multi-level)</li>
+<li>Size of sample</li>
+<li>Inclusion of prior information</li>
+</ul></li>
+<li>Both can be extended to time-varying covariates</li>
 </ul>
 </section>
-<section id="references" class="slide level2">
+<section id="references" class="slide level2 smaller">
 <h2>References</h2>
 <ul>
 <li>Robins, J.M. (1986). “A new approach to causal inference in mortality studies.”</li>
-<li>Hernán, M.A., &amp; Robins, J.M. (2020). <em>Causal Inference: What If.</em></li>
-<li>VanderWeele, T.J. (2015). <em>Explanation in Causal Inference: Methods for Mediation and Interaction.</em></li>
+<li>Hernán, M.A., &amp; Robins, J.M. (2020). “Causal Inference: What If.”</li>
+<li>Lee, Brian K., Justin Lessler, and Elizabeth A. Stuart. (2010). “Improving Propensity Score Weighting Using Machine Learning.”</li>
+<li>Feng, Ping, Xiao-Hua Zhou, Qing-Ming Zou, Ming-Yu Fan, and Xiao-Song Li. (2012). “Generalized Propensity Score for Estimating the Average Treatment Effect of Multiple Treatments.”</li>
+<li>Forastiere, Laura, Fabrizia Mealli, Albert Wu, and Edoardo M. Airoldi. (2022). “Estimating Causal Effects under Network Interference with Bayesian Generalized Propensity Scores.”</li>
 <li>Slide help from chatGPT</li>
 </ul>
-
-<img src="_extensions/nathenbyford/baylor_theme/logo.png" class="slide-logo r-stretch"><div class="footer footer-default">
+<div class="quarto-auto-generated-content">
+<p><img src="_extensions/nathenbyford/baylor_theme/logo.png" class="slide-logo"></p>
+<div class="footer footer-default">
 <p>Nathen Byford</p>
+</div>
 </div>
 </section></section>
     </div>
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="gpt_slides_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="gpt_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="gpt_slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="gpt_slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="gpt_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="gpt_slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="gpt_slides_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="gpt_slides_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="gpt_slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="gpt_slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="IPW-MSM_slides_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -1749,7 +2459,6 @@ Y = \beta_0 + \beta_1 \times Treatment
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -1935,42 +2644,80 @@ Y = \beta_0 + \beta_1 \times Treatment
       });
     </script>
     
+
     <script>
+
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
       // slide changes (different for each slide format).
+
       (function () {
+
         // dispatch for htmlwidgets
+
         function fireSlideEnter() {
+
           const event = window.document.createEvent("Event");
+
           event.initEvent("slideenter", true, true);
+
           window.document.dispatchEvent(event);
+
         }
+
+    
 
         function fireSlideChanged(previousSlide, currentSlide) {
+
           fireSlideEnter();
 
+    
+
           // dispatch for shiny
+
           if (window.jQuery) {
+
             if (previousSlide) {
+
               window.jQuery(previousSlide).trigger("hidden");
+
             }
+
             if (currentSlide) {
+
               window.jQuery(currentSlide).trigger("shown");
+
             }
+
           }
+
         }
+
+    
 
         // hookup for slidy
+
         if (window.w3c_slidy) {
+
           window.w3c_slidy.add_observer(function (slide_num) {
+
             // slide_num starts at position 1
+
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
           });
+
         }
 
+    
+
       })();
+
     </script>
+
+    
 
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -2004,18 +2751,7 @@ Y = \beta_0 + \beta_1 \times Treatment
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -2047,11 +2783,50 @@ Y = \beta_0 + \beta_1 \times Treatment
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -2061,8 +2836,17 @@ Y = \beta_0 + \beta_1 \times Treatment
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -2076,7 +2860,11 @@ Y = \beta_0 + \beta_1 \times Treatment
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {
