@@ -32,7 +32,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -43,7 +43,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -71,7 +71,7 @@
     code span.at { color: #657422; } /* Attribute */
     code span.bn { color: #ad0000; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.cf { color: #003b4f; } /* ControlFlow */
     code span.ch { color: #20794d; } /* Char */
     code span.cn { color: #8f5902; } /* Constant */
     code span.co { color: #5e5e5e; } /* Comment */
@@ -85,7 +85,7 @@
     code span.fu { color: #4758ab; } /* Function */
     code span.im { color: #00769e; } /* Import */
     code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.kw { color: #003b4f; } /* Keyword */
     code span.op { color: #5e5e5e; } /* Operator */
     code span.ot { color: #003b4f; } /* Other */
     code span.pp { color: #ad0000; } /* Preprocessor */
@@ -432,10 +432,10 @@
 <li>Only individuals with known age, sex, race, weight, height, education, alcohol use and intensity of smoking at baseline and followup are considered.</li>
 </ul>
 </section>
-<section id="example-data" class="slide level2 scrollable">
+<section id="example-data" class="slide level2">
 <h2>Example Data</h2>
 
-<img data-src="mean_baseline.png" class="quarto-figure quarto-figure-center r-stretch"><p>Individuals are classified as treated <span class="math inline">\(A=1\)</span> based on two conditions:</p>
+<img data-src="mean_baseline.png" class="r-stretch quarto-figure-center"><p>Individuals are classified as treated <span class="math inline">\(A=1\)</span> based on two conditions:</p>
 <ol type="a">
 <li>If they reported being smokers at baseline, and</li>
 <li>If they have reported to quit smoking in 1982.</li>
@@ -495,10 +495,10 @@ E[Y|A] = \theta_0 + \theta_1A
 <li><strong>Stable Unit Treatment Value Assumption (SUTVA)</strong>: There is no interference between individuals (i.e., one person’s treatment does not affect another’s outcome).</li>
 </ul>
 </section>
-<section id="ipw-rationale" class="slide level2 scrollable">
+<section id="ipw-rationale" class="slide level2">
 <h2>IPW: Rationale</h2>
 
-<img data-src="balance.png" class="quarto-figure quarto-figure-center r-stretch"><ol type="1">
+<img data-src="balance.png" class="r-stretch quarto-figure-center"><p class="caption">Python causality handbook - Facure</p><ol type="1">
 <li>In observational studies, treatment assignment isn’t random</li>
 <li>Give more weight to “surprising” observations and less weight to “expected” observations</li>
 <li>Build a pseudo-population where the treatment looks more randomized</li>
@@ -506,12 +506,12 @@ E[Y|A] = \theta_0 + \theta_1A
 </section>
 <section id="horvitz-thompson-estimators" class="slide level2 smaller">
 <h2>Horvitz-Thompson estimators</h2>
-<p>The IP weighted mean is consistantly estimated by the Horvitz-Thomson estimator <span class="math display">\[
+<p>The Horvitz-Thompson (HT) estimator is a method used to estimate population parameters from stratified simple random sampling. <span class="math display">\[
 \hat{E}\left[\frac{I(A=a)Y}{f(A|L)}\right]
 \]</span></p>
-<p>When estimating <span class="math inline">\(E[Y^a]\)</span> via IP weighting with least squares for a binary <span class="math inline">\(A\)</span>, the modified Horvitz-Thompson estimator refered to as the Hajek estimator is used. <span class="math display">\[
+<p>When estimating <span class="math inline">\(E[Y^a]\)</span> via IP weighting with least squares for a binary <span class="math inline">\(A\)</span>, the modified HT estimator, known as the Hajek estimator, is used: <span class="math display">\[
 \frac{\hat{E}\left[\frac{I(A=a)Y}{f(A|L)}\right]}{\hat{E}\left[\frac{I(A=a)}{f(A|L)}\right]}
-\]</span></p>
+\]</span> Under positivity the Hajek estimator is an (asymptotically) unbiased estimator of <span class="math inline">\(E\left[\frac{I(A=a)Y}{f(A|L)}\right]\)</span>, since <span class="math inline">\(E\left[\frac{I(A=a)}{f(A|L)}\right] = 1\)</span> asymptotically.</p>
 </section>
 <section id="ipw-pros-and-cons" class="slide level2">
 <h2>IPW: Pros and Cons</h2>
@@ -539,38 +539,49 @@ E[Y|A] = \theta_0 + \theta_1A
 <li>Expected value of stabilized weights approximately 1 (Pseudo-population size equal to sample population)</li>
 </ul>
 </section>
-<section id="iwp-example" class="slide level2 smaller scrollable">
+<section id="ipw-stabilized-weights-time-varying" class="slide level2">
+<h2>IPW: Stabilized weights time-varying</h2>
+<p>The Stabilized weights can be extended to time-varying confounders</p>
+<p><span class="math display">\[
+\operatorname{SW} = \frac{P(A|V)}{P(A|L,V)}
+\]</span></p>
+<div class="subsubtext">
+<p><span class="math inline">\(V\)</span> = baseline covariates<br>
+<span class="math inline">\(L\)</span> = time-varying confounders</p>
+</div>
+</section>
+<section id="iwp-example" class="slide level2 smaller">
 <h2>IWP: Example</h2>
 <ol type="1">
 <li><strong>Estimate Propensity Score:</strong> Using logistic regression</li>
 </ol>
 <div class="cell">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
-<span id="cb1-2"><a href=""></a>  qsmk <span class="sc">~</span> sex <span class="sc">+</span> race <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb1-3"><a href=""></a>    <span class="fu">as.factor</span>(education) <span class="sc">+</span> smokeintensity <span class="sc">+</span></span>
-<span id="cb1-4"><a href=""></a>    <span class="fu">I</span>(smokeintensity <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span> smokeyrs <span class="sc">+</span> <span class="fu">I</span>(smokeyrs <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb1-5"><a href=""></a>    <span class="fu">as.factor</span>(exercise) <span class="sc">+</span> <span class="fu">as.factor</span>(active) <span class="sc">+</span> wt71 <span class="sc">+</span> <span class="fu">I</span>(wt71 <span class="sc">^</span> <span class="dv">2</span>),</span>
-<span id="cb1-6"><a href=""></a>  <span class="at">family =</span> <span class="fu">binomial</span>(),</span>
-<span id="cb1-7"><a href=""></a>  <span class="at">data =</span> nhefs.nmv</span>
-<span id="cb1-8"><a href=""></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  qsmk <span class="sc">~</span> sex <span class="sc">+</span> race <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">as.factor</span>(education) <span class="sc">+</span> smokeintensity <span class="sc">+</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="fu">I</span>(smokeintensity <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span> smokeyrs <span class="sc">+</span> <span class="fu">I</span>(smokeyrs <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="fu">as.factor</span>(exercise) <span class="sc">+</span> <span class="fu">as.factor</span>(active) <span class="sc">+</span> wt71 <span class="sc">+</span> <span class="fu">I</span>(wt71 <span class="sc">^</span> <span class="dv">2</span>),</span>
+<span id="cb1-6"><a href="#cb1-6"></a>  <span class="at">family =</span> <span class="fu">binomial</span>(),</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="at">data =</span> nhefs.nmv</span>
+<span id="cb1-8"><a href="#cb1-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <ol start="2" type="1">
 <li><strong>Calculate Weights:</strong> Non-stabilized weights</li>
 </ol>
 <div class="cell">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>p.qsmk.obs <span class="ot">&lt;-</span></span>
-<span id="cb2-2"><a href=""></a>  <span class="fu">ifelse</span>(nhefs.nmv<span class="sc">$</span>qsmk <span class="sc">==</span> <span class="dv">0</span>,</span>
-<span id="cb2-3"><a href=""></a>         <span class="dv">1</span> <span class="sc">-</span> <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">"response"</span>),</span>
-<span id="cb2-4"><a href=""></a>         <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">"response"</span>))</span>
-<span id="cb2-5"><a href=""></a></span>
-<span id="cb2-6"><a href=""></a>nhefs.nmv<span class="sc">$</span>w <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> p.qsmk.obs</span>
-<span id="cb2-7"><a href=""></a></span>
-<span id="cb2-8"><a href=""></a><span class="fu">summary</span>(nhefs.nmv<span class="sc">$</span>w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>p.qsmk.obs <span class="ot">&lt;-</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fu">ifelse</span>(nhefs.nmv<span class="sc">$</span>qsmk <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb2-3"><a href="#cb2-3"></a>         <span class="dv">1</span> <span class="sc">-</span> <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">"response"</span>),</span>
+<span id="cb2-4"><a href="#cb2-4"></a>         <span class="fu">predict</span>(fit, <span class="at">type =</span> <span class="st">"response"</span>))</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a>nhefs.nmv<span class="sc">$</span>w <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> p.qsmk.obs</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="fu">summary</span>(nhefs.nmv<span class="sc">$</span>w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
@@ -581,38 +592,39 @@ E[Y|A] = \theta_0 + \theta_1A
 <li><strong>Weighted Least Squares Model:</strong></li>
 </ol>
 <div class="cell">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">library</span>(<span class="st">"geepack"</span>)</span>
-<span id="cb4-2"><a href=""></a></span>
-<span id="cb4-3"><a href=""></a>msm.w <span class="ot">&lt;-</span> <span class="fu">geeglm</span>(</span>
-<span id="cb4-4"><a href=""></a>  wt82_71 <span class="sc">~</span> qsmk,</span>
-<span id="cb4-5"><a href=""></a>  <span class="at">data =</span> nhefs.nmv,</span>
-<span id="cb4-6"><a href=""></a>  <span class="at">weights =</span> w,</span>
-<span id="cb4-7"><a href=""></a>  <span class="at">id =</span> seqn,</span>
-<span id="cb4-8"><a href=""></a>  <span class="at">corstr =</span> <span class="st">"independence"</span></span>
-<span id="cb4-9"><a href=""></a>)</span>
-<span id="cb4-10"><a href=""></a></span>
-<span id="cb4-11"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(msm.w, <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(<span class="st">"geepack"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>msm.w <span class="ot">&lt;-</span> <span class="fu">geeglm</span>(</span>
+<span id="cb4-4"><a href="#cb4-4"></a>  wt82_71 <span class="sc">~</span> qsmk,</span>
+<span id="cb4-5"><a href="#cb4-5"></a>  <span class="at">data =</span> nhefs.nmv,</span>
+<span id="cb4-6"><a href="#cb4-6"></a>  <span class="at">weights =</span> w,</span>
+<span id="cb4-7"><a href="#cb4-7"></a>  <span class="at">id =</span> seqn,</span>
+<span id="cb4-8"><a href="#cb4-8"></a>  <span class="at">corstr =</span> <span class="st">"independence"</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>)</span>
+<span id="cb4-10"><a href="#cb4-10"></a></span>
+<span id="cb4-11"><a href="#cb4-11"></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(msm.w, <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="pjtgknnmbv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pjtgknnmbv table {
+
+<div id="vkdtlacbne" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vkdtlacbne table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pjtgknnmbv thead, #pjtgknnmbv tbody, #pjtgknnmbv tfoot, #pjtgknnmbv tr, #pjtgknnmbv td, #pjtgknnmbv th {
+#vkdtlacbne thead, #vkdtlacbne tbody, #vkdtlacbne tfoot, #vkdtlacbne tr, #vkdtlacbne td, #vkdtlacbne th {
   border-style: none;
 }
 
-#pjtgknnmbv p {
+#vkdtlacbne p {
   margin: 0;
   padding: 0;
 }
 
-#pjtgknnmbv .gt_table {
+#vkdtlacbne .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -638,12 +650,12 @@ E[Y|A] = \theta_0 + \theta_1A
   border-left-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_caption {
+#vkdtlacbne .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pjtgknnmbv .gt_title {
+#vkdtlacbne .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -655,7 +667,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-width: 0;
 }
 
-#pjtgknnmbv .gt_subtitle {
+#vkdtlacbne .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -667,7 +679,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-top-width: 0;
 }
 
-#pjtgknnmbv .gt_heading {
+#vkdtlacbne .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -679,13 +691,13 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_bottom_border {
+#vkdtlacbne .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_col_headings {
+#vkdtlacbne .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -700,7 +712,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_col_heading {
+#vkdtlacbne .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -720,7 +732,7 @@ E[Y|A] = \theta_0 + \theta_1A
   overflow-x: hidden;
 }
 
-#pjtgknnmbv .gt_column_spanner_outer {
+#vkdtlacbne .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -732,15 +744,15 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 4px;
 }
 
-#pjtgknnmbv .gt_column_spanner_outer:first-child {
+#vkdtlacbne .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pjtgknnmbv .gt_column_spanner_outer:last-child {
+#vkdtlacbne .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pjtgknnmbv .gt_column_spanner {
+#vkdtlacbne .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -752,11 +764,11 @@ E[Y|A] = \theta_0 + \theta_1A
   width: 100%;
 }
 
-#pjtgknnmbv .gt_spanner_row {
+#vkdtlacbne .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pjtgknnmbv .gt_group_heading {
+#vkdtlacbne .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -782,7 +794,7 @@ E[Y|A] = \theta_0 + \theta_1A
   text-align: left;
 }
 
-#pjtgknnmbv .gt_empty_group_heading {
+#vkdtlacbne .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -797,15 +809,15 @@ E[Y|A] = \theta_0 + \theta_1A
   vertical-align: middle;
 }
 
-#pjtgknnmbv .gt_from_md > :first-child {
+#vkdtlacbne .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pjtgknnmbv .gt_from_md > :last-child {
+#vkdtlacbne .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pjtgknnmbv .gt_row {
+#vkdtlacbne .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -824,7 +836,7 @@ E[Y|A] = \theta_0 + \theta_1A
   overflow-x: hidden;
 }
 
-#pjtgknnmbv .gt_stub {
+#vkdtlacbne .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -837,7 +849,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#pjtgknnmbv .gt_stub_row_group {
+#vkdtlacbne .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -851,15 +863,15 @@ E[Y|A] = \theta_0 + \theta_1A
   vertical-align: top;
 }
 
-#pjtgknnmbv .gt_row_group_first td {
+#vkdtlacbne .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pjtgknnmbv .gt_row_group_first th {
+#vkdtlacbne .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pjtgknnmbv .gt_summary_row {
+#vkdtlacbne .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -869,16 +881,16 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#pjtgknnmbv .gt_first_summary_row {
+#vkdtlacbne .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_first_summary_row.thick {
+#vkdtlacbne .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pjtgknnmbv .gt_last_summary_row {
+#vkdtlacbne .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -888,7 +900,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_grand_summary_row {
+#vkdtlacbne .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -898,7 +910,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#pjtgknnmbv .gt_first_grand_summary_row {
+#vkdtlacbne .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -908,7 +920,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-top-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_last_grand_summary_row_top {
+#vkdtlacbne .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -918,11 +930,11 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_striped {
+#vkdtlacbne .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pjtgknnmbv .gt_table_body {
+#vkdtlacbne .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -931,7 +943,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_footnotes {
+#vkdtlacbne .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -945,7 +957,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_footnote {
+#vkdtlacbne .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -954,7 +966,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#pjtgknnmbv .gt_sourcenotes {
+#vkdtlacbne .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -968,7 +980,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#pjtgknnmbv .gt_sourcenote {
+#vkdtlacbne .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -976,137 +988,132 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#pjtgknnmbv .gt_left {
+#vkdtlacbne .gt_left {
   text-align: left;
 }
 
-#pjtgknnmbv .gt_center {
+#vkdtlacbne .gt_center {
   text-align: center;
 }
 
-#pjtgknnmbv .gt_right {
+#vkdtlacbne .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pjtgknnmbv .gt_font_normal {
+#vkdtlacbne .gt_font_normal {
   font-weight: normal;
 }
 
-#pjtgknnmbv .gt_font_bold {
+#vkdtlacbne .gt_font_bold {
   font-weight: bold;
 }
 
-#pjtgknnmbv .gt_font_italic {
+#vkdtlacbne .gt_font_italic {
   font-style: italic;
 }
 
-#pjtgknnmbv .gt_super {
+#vkdtlacbne .gt_super {
   font-size: 65%;
 }
 
-#pjtgknnmbv .gt_footnote_marks {
+#vkdtlacbne .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pjtgknnmbv .gt_asterisk {
+#vkdtlacbne .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pjtgknnmbv .gt_indent_1 {
+#vkdtlacbne .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pjtgknnmbv .gt_indent_2 {
+#vkdtlacbne .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pjtgknnmbv .gt_indent_3 {
+#vkdtlacbne .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pjtgknnmbv .gt_indent_4 {
+#vkdtlacbne .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pjtgknnmbv .gt_indent_5 {
+#vkdtlacbne .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-
-<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="header gt_col_headings">
-<th id="<strong>Characteristic</strong>" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
-<th id="<strong>Beta</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Beta</strong></th>
-<th id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-<th id="<strong>p-value</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">(Intercept)</td>
-<td class="gt_row gt_center" headers="estimate">1.8</td>
-<td class="gt_row gt_center" headers="ci">1.3, 2.2</td>
-<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">qsmk</td>
-<td class="gt_row gt_center" headers="estimate">3.4</td>
-<td class="gt_row gt_center" headers="ci">2.4, 4.5</td>
-<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
-</tr>
-</tbody><tfoot class="gt_footnotes">
-<tr class="odd">
-<td colspan="4" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> CI = Confidence Interval</td>
-</tr>
-</tfoot>
-
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Beta</strong>"><strong>Beta</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">(Intercept)</td>
+<td headers="estimate" class="gt_row gt_center">1.8</td>
+<td headers="ci" class="gt_row gt_center">1.3, 2.2</td>
+<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">qsmk</td>
+<td headers="estimate" class="gt_row gt_center">3.4</td>
+<td headers="ci" class="gt_row gt_center">2.4, 4.5</td>
+<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> CI = Confidence Interval</td>
+    </tr>
+  </tfoot>
 </table>
-
 </div>
 </div>
 </div>
 </section>
-<section id="iwp-example-stabilized-weights" class="slide level2 smaller scrollable">
+<section id="iwp-example-stabilized-weights" class="slide level2 smaller">
 <h2>IWP: Example (Stabilized weights)</h2>
 <ol type="1">
 <li><strong>Estimate Propensity Score:</strong> Using logistic regression</li>
 </ol>
 <div class="cell">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>denom.fit <span class="ot">&lt;-</span></span>
-<span id="cb5-2"><a href=""></a>  <span class="fu">glm</span>(</span>
-<span id="cb5-3"><a href=""></a>    qsmk <span class="sc">~</span> <span class="fu">as.factor</span>(sex) <span class="sc">+</span> <span class="fu">as.factor</span>(race) <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb5-4"><a href=""></a>      <span class="fu">as.factor</span>(education) <span class="sc">+</span> smokeintensity <span class="sc">+</span></span>
-<span id="cb5-5"><a href=""></a>      <span class="fu">I</span>(smokeintensity <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span> smokeyrs <span class="sc">+</span> <span class="fu">I</span>(smokeyrs <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb5-6"><a href=""></a>      <span class="fu">as.factor</span>(exercise) <span class="sc">+</span> <span class="fu">as.factor</span>(active) <span class="sc">+</span> wt71 <span class="sc">+</span> <span class="fu">I</span>(wt71 <span class="sc">^</span> <span class="dv">2</span>),</span>
-<span id="cb5-7"><a href=""></a>    <span class="at">family =</span> <span class="fu">binomial</span>(),</span>
-<span id="cb5-8"><a href=""></a>    <span class="at">data =</span> nhefs.nmv</span>
-<span id="cb5-9"><a href=""></a>  )</span>
-<span id="cb5-10"><a href=""></a></span>
-<span id="cb5-11"><a href=""></a>pd.qsmk <span class="ot">&lt;-</span> <span class="fu">predict</span>(denom.fit, <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>denom.fit <span class="ot">&lt;-</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">glm</span>(</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    qsmk <span class="sc">~</span> <span class="fu">as.factor</span>(sex) <span class="sc">+</span> <span class="fu">as.factor</span>(race) <span class="sc">+</span> age <span class="sc">+</span> <span class="fu">I</span>(age <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>      <span class="fu">as.factor</span>(education) <span class="sc">+</span> smokeintensity <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>      <span class="fu">I</span>(smokeintensity <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span> smokeyrs <span class="sc">+</span> <span class="fu">I</span>(smokeyrs <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>      <span class="fu">as.factor</span>(exercise) <span class="sc">+</span> <span class="fu">as.factor</span>(active) <span class="sc">+</span> wt71 <span class="sc">+</span> <span class="fu">I</span>(wt71 <span class="sc">^</span> <span class="dv">2</span>),</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="at">family =</span> <span class="fu">binomial</span>(),</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    <span class="at">data =</span> nhefs.nmv</span>
+<span id="cb5-9"><a href="#cb5-9"></a>  )</span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a>pd.qsmk <span class="ot">&lt;-</span> <span class="fu">predict</span>(denom.fit, <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <ol start="2" type="1">
 <li><strong>Calculate Weights:</strong> Stabilized weights</li>
 </ol>
 <div class="cell">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>numer.fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(qsmk <span class="sc">~</span> <span class="dv">1</span>, <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">data =</span> nhefs.nmv)</span>
-<span id="cb6-2"><a href=""></a></span>
-<span id="cb6-3"><a href=""></a>pn.qsmk <span class="ot">&lt;-</span> <span class="fu">predict</span>(numer.fit, <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb6-4"><a href=""></a></span>
-<span id="cb6-5"><a href=""></a>nhefs.nmv<span class="sc">$</span>sw <span class="ot">&lt;-</span></span>
-<span id="cb6-6"><a href=""></a>  <span class="fu">ifelse</span>(nhefs.nmv<span class="sc">$</span>qsmk <span class="sc">==</span> <span class="dv">0</span>, ((<span class="dv">1</span> <span class="sc">-</span> pn.qsmk) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> pd.qsmk)),</span>
-<span id="cb6-7"><a href=""></a>         (pn.qsmk <span class="sc">/</span> pd.qsmk))</span>
-<span id="cb6-8"><a href=""></a></span>
-<span id="cb6-9"><a href=""></a><span class="fu">summary</span>(nhefs.nmv<span class="sc">$</span>sw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>numer.fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(qsmk <span class="sc">~</span> <span class="dv">1</span>, <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">data =</span> nhefs.nmv)</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>pn.qsmk <span class="ot">&lt;-</span> <span class="fu">predict</span>(numer.fit, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a>nhefs.nmv<span class="sc">$</span>sw <span class="ot">&lt;-</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>  <span class="fu">ifelse</span>(nhefs.nmv<span class="sc">$</span>qsmk <span class="sc">==</span> <span class="dv">0</span>, ((<span class="dv">1</span> <span class="sc">-</span> pn.qsmk) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> pd.qsmk)),</span>
+<span id="cb6-7"><a href="#cb6-7"></a>         (pn.qsmk <span class="sc">/</span> pd.qsmk))</span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="fu">summary</span>(nhefs.nmv<span class="sc">$</span>sw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
@@ -1117,36 +1124,37 @@ E[Y|A] = \theta_0 + \theta_1A
 <li><strong>Weighted Least Squares Model:</strong></li>
 </ol>
 <div class="cell">
-<details class="code-fold">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>msm.sw <span class="ot">&lt;-</span> <span class="fu">geeglm</span>(</span>
-<span id="cb8-2"><a href=""></a>  wt82_71 <span class="sc">~</span> qsmk,</span>
-<span id="cb8-3"><a href=""></a>  <span class="at">data =</span> nhefs.nmv,</span>
-<span id="cb8-4"><a href=""></a>  <span class="at">weights =</span> sw,</span>
-<span id="cb8-5"><a href=""></a>  <span class="at">id =</span> seqn,</span>
-<span id="cb8-6"><a href=""></a>  <span class="at">corstr =</span> <span class="st">"independence"</span></span>
-<span id="cb8-7"><a href=""></a>)</span>
-<span id="cb8-8"><a href=""></a></span>
-<span id="cb8-9"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(msm.sw, <span class="at">intercept=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>msm.sw <span class="ot">&lt;-</span> <span class="fu">geeglm</span>(</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  wt82_71 <span class="sc">~</span> qsmk,</span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="at">data =</span> nhefs.nmv,</span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="at">weights =</span> sw,</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="at">id =</span> seqn,</span>
+<span id="cb8-6"><a href="#cb8-6"></a>  <span class="at">corstr =</span> <span class="st">"independence"</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(msm.sw, <span class="at">intercept=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="yunedncrmr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#yunedncrmr table {
+
+<div id="zklhuwnegs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zklhuwnegs table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#yunedncrmr thead, #yunedncrmr tbody, #yunedncrmr tfoot, #yunedncrmr tr, #yunedncrmr td, #yunedncrmr th {
+#zklhuwnegs thead, #zklhuwnegs tbody, #zklhuwnegs tfoot, #zklhuwnegs tr, #zklhuwnegs td, #zklhuwnegs th {
   border-style: none;
 }
 
-#yunedncrmr p {
+#zklhuwnegs p {
   margin: 0;
   padding: 0;
 }
 
-#yunedncrmr .gt_table {
+#zklhuwnegs .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1172,12 +1180,12 @@ E[Y|A] = \theta_0 + \theta_1A
   border-left-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_caption {
+#zklhuwnegs .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#yunedncrmr .gt_title {
+#zklhuwnegs .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1189,7 +1197,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-width: 0;
 }
 
-#yunedncrmr .gt_subtitle {
+#zklhuwnegs .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1201,7 +1209,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-top-width: 0;
 }
 
-#yunedncrmr .gt_heading {
+#zklhuwnegs .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1213,13 +1221,13 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_bottom_border {
+#zklhuwnegs .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_col_headings {
+#zklhuwnegs .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1234,7 +1242,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_col_heading {
+#zklhuwnegs .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1254,7 +1262,7 @@ E[Y|A] = \theta_0 + \theta_1A
   overflow-x: hidden;
 }
 
-#yunedncrmr .gt_column_spanner_outer {
+#zklhuwnegs .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1266,15 +1274,15 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 4px;
 }
 
-#yunedncrmr .gt_column_spanner_outer:first-child {
+#zklhuwnegs .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#yunedncrmr .gt_column_spanner_outer:last-child {
+#zklhuwnegs .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#yunedncrmr .gt_column_spanner {
+#zklhuwnegs .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1286,11 +1294,11 @@ E[Y|A] = \theta_0 + \theta_1A
   width: 100%;
 }
 
-#yunedncrmr .gt_spanner_row {
+#zklhuwnegs .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#yunedncrmr .gt_group_heading {
+#zklhuwnegs .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1316,7 +1324,7 @@ E[Y|A] = \theta_0 + \theta_1A
   text-align: left;
 }
 
-#yunedncrmr .gt_empty_group_heading {
+#zklhuwnegs .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1331,15 +1339,15 @@ E[Y|A] = \theta_0 + \theta_1A
   vertical-align: middle;
 }
 
-#yunedncrmr .gt_from_md > :first-child {
+#zklhuwnegs .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#yunedncrmr .gt_from_md > :last-child {
+#zklhuwnegs .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#yunedncrmr .gt_row {
+#zklhuwnegs .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1358,7 +1366,7 @@ E[Y|A] = \theta_0 + \theta_1A
   overflow-x: hidden;
 }
 
-#yunedncrmr .gt_stub {
+#zklhuwnegs .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1371,7 +1379,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#yunedncrmr .gt_stub_row_group {
+#zklhuwnegs .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1385,15 +1393,15 @@ E[Y|A] = \theta_0 + \theta_1A
   vertical-align: top;
 }
 
-#yunedncrmr .gt_row_group_first td {
+#zklhuwnegs .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#yunedncrmr .gt_row_group_first th {
+#zklhuwnegs .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#yunedncrmr .gt_summary_row {
+#zklhuwnegs .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1403,16 +1411,16 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#yunedncrmr .gt_first_summary_row {
+#zklhuwnegs .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_first_summary_row.thick {
+#zklhuwnegs .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#yunedncrmr .gt_last_summary_row {
+#zklhuwnegs .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1422,7 +1430,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_grand_summary_row {
+#zklhuwnegs .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1432,7 +1440,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#yunedncrmr .gt_first_grand_summary_row {
+#zklhuwnegs .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1442,7 +1450,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-top-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_last_grand_summary_row_top {
+#zklhuwnegs .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1452,11 +1460,11 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_striped {
+#zklhuwnegs .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#yunedncrmr .gt_table_body {
+#zklhuwnegs .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1465,7 +1473,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-bottom-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_footnotes {
+#zklhuwnegs .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1479,7 +1487,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_footnote {
+#zklhuwnegs .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1488,7 +1496,7 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#yunedncrmr .gt_sourcenotes {
+#zklhuwnegs .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1502,7 +1510,7 @@ E[Y|A] = \theta_0 + \theta_1A
   border-right-color: #D3D3D3;
 }
 
-#yunedncrmr .gt_sourcenote {
+#zklhuwnegs .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1510,97 +1518,92 @@ E[Y|A] = \theta_0 + \theta_1A
   padding-right: 5px;
 }
 
-#yunedncrmr .gt_left {
+#zklhuwnegs .gt_left {
   text-align: left;
 }
 
-#yunedncrmr .gt_center {
+#zklhuwnegs .gt_center {
   text-align: center;
 }
 
-#yunedncrmr .gt_right {
+#zklhuwnegs .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#yunedncrmr .gt_font_normal {
+#zklhuwnegs .gt_font_normal {
   font-weight: normal;
 }
 
-#yunedncrmr .gt_font_bold {
+#zklhuwnegs .gt_font_bold {
   font-weight: bold;
 }
 
-#yunedncrmr .gt_font_italic {
+#zklhuwnegs .gt_font_italic {
   font-style: italic;
 }
 
-#yunedncrmr .gt_super {
+#zklhuwnegs .gt_super {
   font-size: 65%;
 }
 
-#yunedncrmr .gt_footnote_marks {
+#zklhuwnegs .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#yunedncrmr .gt_asterisk {
+#zklhuwnegs .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#yunedncrmr .gt_indent_1 {
+#zklhuwnegs .gt_indent_1 {
   text-indent: 5px;
 }
 
-#yunedncrmr .gt_indent_2 {
+#zklhuwnegs .gt_indent_2 {
   text-indent: 10px;
 }
 
-#yunedncrmr .gt_indent_3 {
+#zklhuwnegs .gt_indent_3 {
   text-indent: 15px;
 }
 
-#yunedncrmr .gt_indent_4 {
+#zklhuwnegs .gt_indent_4 {
   text-indent: 20px;
 }
 
-#yunedncrmr .gt_indent_5 {
+#zklhuwnegs .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
-
-<table class="gt_table caption-top" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-<thead>
-<tr class="header gt_col_headings">
-<th id="<strong>Characteristic</strong>" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
-<th id="<strong>Beta</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Beta</strong></th>
-<th id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-<th id="<strong>p-value</strong>" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong></th>
-</tr>
-</thead>
-<tbody class="gt_table_body">
-<tr class="odd">
-<td class="gt_row gt_left" headers="label">(Intercept)</td>
-<td class="gt_row gt_center" headers="estimate">1.8</td>
-<td class="gt_row gt_center" headers="ci">1.3, 2.2</td>
-<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="label">qsmk</td>
-<td class="gt_row gt_center" headers="estimate">3.4</td>
-<td class="gt_row gt_center" headers="ci">2.4, 4.5</td>
-<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
-</tr>
-</tbody><tfoot class="gt_footnotes">
-<tr class="odd">
-<td colspan="4" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> CI = Confidence Interval</td>
-</tr>
-</tfoot>
-
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="<strong>Characteristic</strong>"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>Beta</strong>"><strong>Beta</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>95% CI</strong><span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;><sup>1</sup></span>"><strong>95% CI</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="<strong>p-value</strong>"><strong>p-value</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="label" class="gt_row gt_left">(Intercept)</td>
+<td headers="estimate" class="gt_row gt_center">1.8</td>
+<td headers="ci" class="gt_row gt_center">1.3, 2.2</td>
+<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">qsmk</td>
+<td headers="estimate" class="gt_row gt_center">3.4</td>
+<td headers="ci" class="gt_row gt_center">2.4, 4.5</td>
+<td headers="p.value" class="gt_row gt_center">&lt;0.001</td></tr>
+  </tbody>
+  
+  <tfoot class="gt_footnotes">
+    <tr>
+      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> CI = Confidence Interval</td>
+    </tr>
+  </tfoot>
 </table>
-
 </div>
 </div>
 </div>
@@ -1622,6 +1625,10 @@ E[Y|A] = \theta_0 + \theta_1A
 <h1>Marginal Structural Models</h1>
 
 </section>
+<section id="how-about-an-xkcd-comic" class="slide level2">
+<h2>How about an XKCD comic?</h2>
+
+<img data-src="msm-comic.png" width="80" class="r-stretch quarto-figure-center"><p class="caption">AI Generated xkcd comic</p></section>
 <section id="marginal-structural-models-msms-overview" class="slide level2">
 <h2>Marginal Structural Models (MSMs): Overview</h2>
 <ul>
@@ -1928,80 +1935,42 @@ Y = \beta_0 + \beta_1 \times Treatment
       });
     </script>
     
-
     <script>
-
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-
       // slide changes (different for each slide format).
-
       (function () {
-
         // dispatch for htmlwidgets
-
         function fireSlideEnter() {
-
           const event = window.document.createEvent("Event");
-
           event.initEvent("slideenter", true, true);
-
           window.document.dispatchEvent(event);
-
         }
-
-    
 
         function fireSlideChanged(previousSlide, currentSlide) {
-
           fireSlideEnter();
 
-    
-
           // dispatch for shiny
-
           if (window.jQuery) {
-
             if (previousSlide) {
-
               window.jQuery(previousSlide).trigger("hidden");
-
             }
-
             if (currentSlide) {
-
               window.jQuery(currentSlide).trigger("shown");
-
             }
-
           }
-
         }
-
-    
 
         // hookup for slidy
-
         if (window.w3c_slidy) {
-
           window.w3c_slidy.add_observer(function (slide_num) {
-
             // slide_num starts at position 1
-
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-
           });
-
         }
 
-    
-
       })();
-
     </script>
-
-    
 
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {

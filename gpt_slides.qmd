@@ -110,7 +110,7 @@ $$
 
 ## IPW: Rationale
 
-![https://matheusfacure.github.io/python-causality-handbook/11-Propensity-Score.html](balance.png){fig-align="center"}
+![Python causality handbook - Facure](balance.png){fig-align="center"}
 
 1. In observational studies, treatment assignment isn't random
 2. Give more weight to "surprising" observations and less weight to "expected" observations
@@ -118,15 +118,16 @@ $$
 
 ## Horvitz-Thompson estimators{.smaller}
 
-The IP weighted mean is consistantly estimated by the Horvitz-Thomson estimator
+The Horvitz-Thompson (HT) estimator is a method used to estimate population parameters from stratified simple random sampling.
 $$
 \hat{E}\left[\frac{I(A=a)Y}{f(A|L)}\right]
 $$
 
-When estimating $E[Y^a]$ via IP weighting with least squares for a binary $A$, the modified Horvitz-Thompson estimator refered to as the Hajek estimator is used.
+When estimating $E[Y^a]$ via IP weighting with least squares for a binary $A$, the modified HT estimator, known as the Hajek estimator, is used:
 $$
 \frac{\hat{E}\left[\frac{I(A=a)Y}{f(A|L)}\right]}{\hat{E}\left[\frac{I(A=a)}{f(A|L)}\right]}
 $$
+Under positivity the Hajek estimator is an (asymptotically) unbiased estimator of $E\left[\frac{I(A=a)Y}{f(A|L)}\right]$, since $E\left[\frac{I(A=a)}{f(A|L)}\right] = 1$ asymptotically.
 
 ## IPW: Pros and Cons
 
@@ -287,6 +288,10 @@ With both stabilized and non-stabilized weights the estimated treatment effect i
 
 
 # Marginal Structural Models
+
+## How about an XKCD comic?
+
+![AI Generated xkcd comic](msm-comic.png){width=80 fig-align="center"}
 
 
 ## Marginal Structural Models (MSMs): Overview
