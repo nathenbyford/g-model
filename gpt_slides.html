@@ -8,10 +8,10 @@
 <link href="gpt_slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="gpt_slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="gpt_slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.57">
+  <meta name="generator" content="quarto-1.3.450">
 
   <meta name="author" content="">
-  <meta name="dcterms.date" content="2024-10-25">
+  <meta name="dcterms.date" content="2024-10-28">
   <title>IP-weighting and Marginal Structural Models (MSMs)</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -157,8 +157,7 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    padding-bottom: 0.5rem;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -348,7 +347,7 @@
 <div class="quarto-title-authors">
 </div>
 
-  <p class="date">October 25, 2024</p>
+  <p class="date">October 28, 2024</p>
 </section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
@@ -365,11 +364,12 @@
 <li></li>
 </ul>
 </section>
-<section id="transition-to-ip-weighting" class="slide level2">
-<h2>Transition to IP Weighting</h2>
+<section id="introduction-to-ip-weighting" class="slide level2">
+<h2>Introduction to IP-weighting</h2>
 <ul>
-<li><strong>G-formula</strong> and <strong>G-computation</strong> focus on modeling the <strong>outcome</strong>.</li>
-<li><strong>IP-weighting</strong> provides an alternative approach by modeling the <strong>treatment assignment</strong> rather than the outcome.</li>
+<li>Inverse Probability Weighting (IPW): A method to estimate causal effects by re-weighting the data.</li>
+<li>Purpose: Adjust for confounding by balancing covariates across treatment groups.</li>
+<li>Useful for both point treatment and time-varying treatments.</li>
 </ul>
 </section></section>
 <section>
@@ -430,19 +430,19 @@
 <li>Expected value of stabilized weights approximately 1</li>
 </ul>
 </section>
-<section id="ipw-example" class="slide level2 scrollable">
+<section id="ipw-stabilized-weights-time-varying" class="slide level2">
+<h2>IPW: Stabilized weights time-varying</h2>
+<p>The Stabilized weights can be extended to time-varying confounders</p>
+<p><span class="math display">\[
+\operatorname{SW} = \frac{P(A|V)}{P(A|L,V)}
+\]</span></p>
+<div class="subsubtext">
+<p><span class="math inline">\(V\)</span> = baseline covariates<br>
+<span class="math inline">\(L\)</span> = time-varying confounders</p>
+</div>
+</section>
+<section id="ipw-example" class="slide level2">
 <h2>IPW: Example</h2>
-<ol type="1">
-<li><p><strong>Estimate Propensity Score:</strong> <span class="math display">\[
-\hat{P}(Treatment \mid Confounders)
-\]</span> Example: Logistic regression model for the probability of treatment.</p></li>
-<li><p><strong>Calculate Weights:</strong> <span class="math display">\[
-Weight = \frac{1}{\hat{P}(Treatment \mid Confounders)}
-\]</span></p></li>
-<li><p><strong>Weighted Outcome Model:</strong> <span class="math display">\[
-E(Y \mid Treatment) = f(Weighted Data)
-\]</span></p></li>
-</ol>
 </section></section>
 <section>
 <section id="marginal-structural-models" class="title-slide slide level1 center">
@@ -456,8 +456,11 @@ E(Y \mid Treatment) = f(Weighted Data)
 <li>Combine <strong>IPW</strong> and <strong>structural models</strong> to estimate causal effects.</li>
 <li>MSMs model the effect of treatment on outcome, weighted by IPW to adjust for confounders.</li>
 </ul>
+<p><span class="math display">\[
+E[Y^a] = \beta_0 + \beta_1 a
+\]</span></p>
 </section>
-<section id="msms-example" class="slide level2 scrollable">
+<section id="msms-example" class="slide level2">
 <h2>MSMs: Example</h2>
 <ol type="1">
 <li><p><strong>Step 1: Calculate Stabilized Weights</strong> <span class="math display">\[
@@ -478,7 +481,7 @@ Y = \beta_0 + \beta_1 \times Treatment
 </section>
 <section id="comparing-methods" class="slide level2 smaller">
 <h2>Comparing Methods</h2>
-<table class="caption-top">
+<table>
 <colgroup>
 <col style="width: 15%">
 <col style="width: 25%">
@@ -532,11 +535,9 @@ Y = \beta_0 + \beta_1 \times Treatment
 <li>VanderWeele, T.J. (2015). <em>Explanation in Causal Inference: Methods for Mediation and Interaction.</em></li>
 <li>Slide help from chatGPT</li>
 </ul>
-<div class="quarto-auto-generated-content">
-<p><img src="_extensions/nathenbyford/baylor_theme/logo.png" class="slide-logo"></p>
-<div class="footer footer-default">
+
+<img src="_extensions/nathenbyford/baylor_theme/logo.png" class="slide-logo r-stretch"><div class="footer footer-default">
 <p>Nathen Byford</p>
-</div>
 </div>
 </section></section>
     </div>
@@ -565,6 +566,7 @@ Y = \beta_0 + \beta_1 \times Treatment
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
+'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -781,7 +783,18 @@ Y = \beta_0 + \beta_1 \times Treatment
         }
         return false;
       }
-      const onCopySuccess = function(e) {
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -813,50 +826,11 @@ Y = \beta_0 + \beta_1 \times Treatment
         }, 1000);
         // clear code selection
         e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
       });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        // For code content inside modals, clipBoardJS needs to be initialized with a container option
-        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-        var mailtoRegex = new RegExp(/^mailto:/);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-            // undo the damage that might have been done by quarto-nav.js in the case of
-            // links that we want to consider external
-            if (link.dataset.originalHref !== undefined) {
-              link.href = link.dataset.originalHref;
-            }
-          }
-        }
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      function tippyHover(el, contentFn) {
         const config = {
           allowHTML: true,
+          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -866,17 +840,8 @@ Y = \beta_0 + \beta_1 \times Treatment
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start',
+          placement: 'bottom-start'
         };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -890,11 +855,7 @@ Y = \beta_0 + \beta_1 \times Treatment
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          if (note) {
-            return note.innerHTML;
-          } else {
-            return "";
-          }
+          return note.innerHTML;
         });
       }
       const findCites = (el) => {

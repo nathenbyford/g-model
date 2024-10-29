@@ -22,10 +22,11 @@ Simple models
 
 
 
-## Transition to IP Weighting
+## Introduction to IP-weighting
 
-- **G-formula** and **G-computation** focus on modeling the **outcome**.
-- **IP-weighting** provides an alternative approach by modeling the **treatment assignment** rather than the outcome.
+- Inverse Probability Weighting (IPW): A method to estimate causal effects by re-weighting the data.
+- Purpose: Adjust for confounding by balancing covariates across treatment groups.
+- Useful for both point treatment and time-varying treatments.
 
 
 # Inverse Probability Weighting
@@ -81,30 +82,26 @@ Key Properties
 - Denominator: Conditional probability of treatment
 - Expected value of stabilized weights approximately 1
 
+## IPW: Stabilized weights time-varying
+
+The Stabilized weights can be extended to time-varying confounders
+
+$$
+\operatorname{SW} = \frac{P(A|V)}{P(A|L,V)}
+$$ 
+
+:::{.subsubtext}
+$V$ = baseline covariates  
+$L$ = time-varying confounders
+:::
+
+
 ## IPW: Example
-
-1. **Estimate Propensity Score:**
-   $$
-   \hat{P}(Treatment \mid Confounders)
-   $$
-   Example: Logistic regression model for the probability of treatment.
-
-2. **Calculate Weights:**
-   $$
-   Weight = \frac{1}{\hat{P}(Treatment \mid Confounders)}
-   $$
-
-3. **Weighted Outcome Model:**
-   $$
-   E(Y \mid Treatment) = f(Weighted Data)
-   $$
-
 
 
 
 
 # Marginal Structural Models
-
 
 
 ## Marginal Structural Models (MSMs): Overview
@@ -113,6 +110,9 @@ Key Properties
 - Combine **IPW** and **structural models** to estimate causal effects.
 - MSMs model the effect of treatment on outcome, weighted by IPW to adjust for confounders.
 
+$$
+E[Y^a] = \beta_0 + \beta_1 a
+$$
 
 
 ## MSMs: Example
