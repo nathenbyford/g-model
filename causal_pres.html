@@ -357,66 +357,6 @@
 </div>
 
 </section>
-<section>
-<section id="introduction" class="title-slide slide level1 center">
-<h1>Introduction</h1>
-
-</section>
-<section id="motivation" class="slide level2">
-<h2>Motivation</h2>
-</section>
-<section id="the-fundamental-problem" class="slide level2">
-<h2>The fundamental problem</h2>
-<p>Time-varying confounding</p>
-</section>
-<section id="breif-historical-context" class="slide level2">
-<h2>Breif historical context</h2>
-</section>
-<section id="longitudinal-studies" class="slide level2">
-<h2>Longitudinal Studies</h2>
-<ul>
-<li>Often observe Time-varying covariates</li>
-</ul>
-</section>
-<section id="motivating-example" class="slide level2">
-<h2>Motivating example</h2>
-<ul>
-<li>In HIV treatment, CD4 count is used to measure the effect of treatment.
-<ul>
-<li>Higher CD4, the better the treatment is working</li>
-</ul></li>
-<li>CD4 is also effected by HIV viral load
-<ul>
-<li>This is measured before the second treatment is administered as baseline</li>
-</ul></li>
-</ul>
-<div class="cell" data-reveal="true" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class=""><p></p>
-<div>
-<pre class="mermaid mermaid-js">graph LR
-    L0[CD4 Count t=0] --&gt; A0[Treatment t=0]
-    L0 --&gt; L1[CD4 Count t=1]
-    A0 --&gt; L1
-    L1 --&gt; A1[Treatment t=1]
-    L1 --&gt; Y[Outcome]
-    A1 --&gt; Y
-    A0 --&gt; Y
-</pre>
-</div>
-<p></p></figure><p></p>
-</div>
-</div>
-</div>
-</section>
-<section id="traditional-regression-model" class="slide level2">
-<h2>Traditional Regression model</h2>
-<p><span class="math display">\[
-\hat{y} = X_0 + \beta_1 X_1 + ... + \varepsilon
-\]</span></p>
-<p>Assumptions:</p>
-</section>
 <section id="g-formula" class="slide level2 scrollable">
 <h2>G-formula</h2>
 <p>Key idea:</p>
@@ -460,7 +400,7 @@
 </div>
 </div>
 <p>The main idea is to use counterfactuals to create an estimation of average effects.</p>
-</section></section>
+</section>
 <section>
 <section id="ip-weighting-and-marginal-structural-models" class="title-slide slide level1 center">
 <h1>IP-weighting and Marginal Structural Models</h1>
@@ -476,6 +416,94 @@
 W^A = \frac{p}{f(A|L)}, \quad 0 &lt; p &lt; 1
 \]</span> The choice of <span class="math inline">\(p\)</span> is determined such that the pseudo-population probability of treatment will not depend on the cofounders.</p>
 </div>
+</section></section>
+<section>
+<section id="g-computation-1" class="title-slide slide level1 center">
+<h1>G-computation</h1>
+
+</section>
+<section id="g-computation-overview" class="slide level2 scrollable">
+<h2>G-computation: Overview</h2>
+<ul>
+<li>Originates from Robins (1986).</li>
+<li>Directly models the <strong>counterfactual outcomes</strong>.</li>
+<li>Steps:
+<ol type="1">
+<li>Fit a model for the outcome based on treatment and confounders.</li>
+<li>Predict outcomes for everyone under each treatment condition.</li>
+<li>Average predicted outcomes to estimate the treatment effect.</li>
+</ol></li>
+</ul>
+</section>
+<section id="g-computation-assumptions" class="slide level2">
+<h2>G-computation: Assumptions</h2>
+<ul>
+<li><strong>No unmeasured confounding</strong>: All confounders must be measured and correctly included in the model.</li>
+<li><strong>Correct model specification</strong>: The model for the outcome must be correctly specified.</li>
+<li><strong>Positivity (Overlap)</strong>: There must be non-zero probability of receiving each treatment for all levels of confounders.</li>
+<li><strong>Consistency</strong>: The potential outcome under the observed treatment equals the actual observed outcome.</li>
+</ul>
+</section>
+<section id="g-formula-overview" class="slide level2">
+<h2>G-formula: Overview</h2>
+<ul>
+<li><strong>G-formula</strong> (Generalized Intervention Formula) is a <strong>mathematical representation</strong> of the distribution of outcomes under interventions.</li>
+<li>Provides a way to calculate the <strong>counterfactual outcome distribution</strong> if we intervene to assign treatment <span class="math inline">\(A = a\)</span>.</li>
+<li><strong>G-computation</strong> uses the G-formula to estimate causal effects.</li>
+</ul>
+<p><span class="math display">\[
+P(Y(a)) = \sum_{L} P(Y \mid A=a, L) P(L)
+\]</span></p>
+<div class="subsubtext">
+<p>Where: <span class="math inline">\(Y(a)\)</span>: Potential outcome under treatment <span class="math inline">\(a\)</span>.<br>
+<span class="math inline">\(A\)</span>: Treatment or exposure.<br>
+<span class="math inline">\(L\)</span>: Confounders.<br>
+<span class="math inline">\(P(Y \mid A=a, L)\)</span>: Conditional distribution of the outcome given treatment and confounders.</p>
+</div>
+</section>
+<section id="what-does-the-g-formula-estimate" class="slide level2">
+<h2>What does the G-formula estimate?</h2>
+<div>
+<ul>
+<li class="fragment">The <strong>counterfactual distribution</strong> of outcomes if everyone in the population received treatment <span class="math inline">\(A = a\)</span>.</li>
+<li class="fragment">It models the causal effect of treatment by adjusting for confounding factors (e.g., age, comorbidities).</li>
+</ul>
+</div>
+</section>
+<section id="g-formula-steps" class="slide level2 scrollable">
+<h2>G-formula: Steps</h2>
+<ol type="1">
+<li><strong>Model outcome</strong> <span class="math inline">\(Y\)</span> as a function of treatment <span class="math inline">\(A\)</span> and confounders <span class="math inline">\(L\)</span>.</li>
+<li><strong>Predict counterfactual outcomes</strong> <span class="math inline">\(Y(a)\)</span> by intervening on the treatment (i.e., fixing <span class="math inline">\(A = a\)</span>).</li>
+<li><strong>Average outcomes</strong> to estimate the expected outcome under treatment <span class="math inline">\(a\)</span>.</li>
+<li>Repeat for other treatment levels to compare effects.</li>
+</ol>
+</section>
+<section id="g-formula-assumptions" class="slide level2">
+<h2>G-formula: Assumptions</h2>
+<ul>
+<li><strong>No unmeasured confounding</strong>: All confounders affecting treatment and outcome must be measured.</li>
+<li><strong>Correct model specification</strong>: The model used for the outcome must be correctly specified.</li>
+<li><strong>Positivity</strong>: There must be a positive probability of receiving each treatment for all combinations of confounders.</li>
+<li><strong>Consistency</strong>: Observed outcomes under the given treatment match the potential outcomes.</li>
+</ul>
+</section>
+<section id="how-does-the-g-formula-relate-to-g-computation" class="slide level2">
+<h2>How does the G-formula relate to G-computation?</h2>
+<div>
+<ul>
+<li class="fragment">The <strong>G-formula</strong> is a mathematical formula representing the counterfactual distribution.</li>
+<li class="fragment"><strong>G-computation</strong> is the <strong>algorithmic procedure</strong> used to implement the G-formula to estimate causal effects in practice.</li>
+</ul>
+</div>
+</section>
+<section id="example-applying-the-g-formula" class="slide level2 scrollable">
+<h2>Example: Applying the G-formula</h2>
+<ol type="1">
+<li>Fit a model for <span class="math inline">\(Y\)</span> as a function of <span class="math inline">\(A\)</span> and <span class="math inline">\(L\)</span>.</li>
+<li>Use this model to predict outcomes <span class="math inline">\(Y(a)\)</span> if everyone received treatment <span class="math inline">\(a\)</span>.</li>
+<li>Average the predicted outcomes to get the causal effect of treatment <span class="math inline">\(a\)</span>.</li>
+</ol>
 <div class="quarto-auto-generated-content">
 <p><img src="_extensions/nathenbyford/baylor_theme/logo.png" class="slide-logo"></p>
 <div class="footer footer-default">

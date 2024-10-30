@@ -14,48 +14,6 @@ library(ggdag)
 ```
 
 
-# Introduction
-
-## Motivation
-
-
-## The fundamental problem
-
-Time-varying confounding
-
-## Breif historical context
-
-## Longitudinal Studies
-
-- Often observe Time-varying covariates
-
-## Motivating example
-
-- In HIV treatment, CD4 count is used to measure the effect of treatment.
-    - Higher CD4, the better the treatment is working
-- CD4 is also effected by HIV viral load
-    - This is measured before the second treatment is administered as baseline
-
-```{mermaid}
-graph LR
-    L0[CD4 Count t=0] --> A0[Treatment t=0]
-    L0 --> L1[CD4 Count t=1]
-    A0 --> L1
-    L1 --> A1[Treatment t=1]
-    L1 --> Y[Outcome]
-    A1 --> Y
-    A0 --> Y
-```
-
-
-## Traditional Regression model
-
-$$
-\hat{y} = X_0 + \beta_1 X_1 + ... + \varepsilon
-$$
-
-Assumptions:
-
 ## G-formula
 
 Key idea:
@@ -90,9 +48,9 @@ flowchart LR
 
 The main idea is to use counterfactuals to create an estimation of average effects.
 
-# IP-weighting and Marginal Structural Models
+- Sound similar?
 
-## Inverse Probability - Weighting
+## IP - Weighting and MSMs
 
 - Goal: Create a pseudo-population in which there is no association between the covariates $L$ and the Treatment $A$.
 
