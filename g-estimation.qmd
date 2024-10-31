@@ -1,26 +1,339 @@
 ---
-title: "G-estimation"
+title: "Time-varying MSMs with IP weighting in R"
 author: "Nathen Byford"
 format: baylor_theme-revealjs
+callout-appearance: simple
 ---
 
-## Quarto
+```{r}
+#| include: false
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+library(tidyverse); theme_set(theme_bw())
 
-## Bullets
+set.seed(12345)
+```
 
-When you click the **Render** button a document will be generated that includes:
+## Data Generation {.smaller}
 
--   Content authored with markdown
--   Output from executable code
-
-## Code
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+Simulated data used for example
 
 ```{r}
-1 + 1
+#| echo: true
+#| code-line-numbers: "|3-6|7-12|13-18|19-24"
+
+#define sample size
+n <- 2000
+#define confounder c1 (gender, male==1)
+male <- rbinom(n,1,0.55)
+#define confounder c2 (age)
+age <- exp(rnorm(n, 3, 0.5))
+#define treatment at time 1
+t_1 <- rbinom(n,1,0.20)
+#define treatment at time 2
+t_2 <- rbinom(n,1,0.20)
+#define treatment at time 3
+t_3 <- rbinom(n,1,0.20)
+#define depression at time 1 (prevalence = number per 100000 population)
+d_1 <- exp(rnorm(n, 0.001, 0.5))
+#define depression at time 2 (prevalence = number per 100000 population)
+d_2 <- exp(rnorm(n, 0.002, 0.5))
+#define depression at time 3 (prevalence = number per 100000 population)
+d_3 <- exp(rnorm(n, 0.004, 0.5))
+#define tme-varying confounder v1 as a function of t1 and d1
+v_1 <- (0.4*t_1 + 0.80*d_1 + rnorm(n, 0, sqrt(0.99))) + 5
+#define tme-varying confounder v2 as a function of t1 and d1
+v_2 <- (0.4*t_2 + 0.80*d_2 + rnorm(n, 0, sqrt(0.55))) + 5
+#define tme-varying confounder v3 as a function of t1 and d1
+v_3 <- (0.4*t_3 + 0.80*d_3 + rnorm(n, 0, sqrt(0.33))) + 5
+
+#put all in a tibble
+data <- tibble(male, age, v_1, v_2, v_3, t_1, t_2, t_3, d_1, d_2, d_3)
+```
+
+## Data Prep
+
+```{r}
+#| echo: true
+#| code-fold: true
+
+# convert from wide to long format
+data_long <- data |> 
+  mutate(id = 1:n()) |> 
+  pivot_longer(
+    cols = c(v_1, v_2, v_3, t_1, t_2, t_3, d_1, d_2, d_3),
+    names_to = c(".value", "time"),
+    names_sep = "_"
+  ) |> 
+  arrange(id, time) |> 
+  relocate(id, time, age, male, t, v) |> 
+  dplyr::rename(treat = t)
+  
+data_long
+```
+
+## Longitudinal Data Analysis
+
+```{r}
+#| echo: true
+
+#required packages
+library(geepack)
+library(survey)
+library(ipw)
+```
+
+- **geepack**: includes functions for Generalized Estimating Equiations (GEE)
+- **ipw**: includes functions for IP weighting
+
+:::{.callout-note}
+## Generalized Estimating Equations(GEEs)
+
+GEEs are designed to evaluate the impact of the treatment ($t$) on the outcome ($d$) and to handle the time-varying covariates ($v$) in the panel data.
+:::
+
+## IP-Weighting
+
+```{r}
+#| echo: true
+#| code-fold: true
+
+
+# estimate inverse probability weights (time-varying) using a logistic regression
+
+
+iptw_time <- function(data, ti) {
+  data <- dplyr::filter(data, time == ti)
+  num_fit <- glm(treat ~ factor(male) + age, family = "binomial", data = data)
+  
+  pn.treat <- predict(num_fit, type = "response")
+  
+  denom_fit <- glm(treat ~ v + factor(male) + age, family = "binomial", data = data)
+  
+  pd.treat <- predict(denom_fit, type = "response")
+  
+  w <- ifelse(
+          data$treat == 0, ((1 - pn.treat) / (1 - pd.treat)),
+          (pn.treat / pd.treat)
+        )
+  tibble(w, pn.treat, pd.treat, time = ti)
+}
+
+iptw <- map(1:3, ~ iptw_time(data_long, .x))
+
+ipw_df <- bind_rows(iptw)
+  
+
+new_data <- data_long |> 
+  arrange(time, id) |> 
+  mutate(w = ipw_df$w)
+
+summary(new_data$w)
 ```
 
 
+```{r}
+new_data |> 
+  ggplot(aes(x = time, y = w)) +
+  geom_boxplot() +
+  geom_hline(aes(yintercept = 1), linetype = 2) +
+  labs(title = "Stabilized Weights", x = "Time", y = "IP-Weights")
+```
+
+## IPW: Assumptions
+
+- Important to check assumptions of IPW: positivity, correct specification of PS model, and exchangeability
+
+```{r}
+#| fig-align: "center"
+
+ipw_df |>
+  pivot_longer(cols = c(pn.treat, pd.treat)) |> 
+  mutate(name = if_else(name == "pd.treat", "denominator", "numerator")) |> 
+  ggplot(aes(x = value)) +
+  geom_density() +
+  facet_grid(name ~ time, scales = "free_y") +
+  labs(title = "Density of Propoensity Scores")
+```
+
+## IPW: Correct Model Specification {.smaller}
+
+- Using package `cobalt` we can check the balance of covariates
+
+
+```{r}
+#| echo: true
+#| code-fold: true
+
+library(cobalt)
+
+data_1 <- new_data |> filter(time == 1)
+data_2 <- new_data |> filter(time == 2)
+data_3 <- new_data |> filter(time == 3)
+
+bal.tab(
+  treat ~ v + factor(data_1$male) + age, 
+  data = data_1, 
+  weights = data_1$w,
+  method = "weighting"
+)
+bal.tab(
+  treat ~ v + factor(data_2$male) + age, 
+  data = data_2, 
+  weights = data_2$w,
+  method = "weighting"
+)
+bal.tab(
+  treat ~ v + factor(data_3$male) + age, 
+  data = data_3, 
+  weights = data_3$w,
+  method = "weighting"
+)
+```
+
+
+## IPW: Correct Model Specification 
+
+```{r}
+#| echo: true
+#| code-fold: true
+
+
+library(patchwork)
+
+p1 <- love.plot(
+  bal.tab(
+    treat ~ v + factor(data_1$male) + age, 
+    data = data_1, 
+    weights = data_1$w,
+    method = "weighting"
+  )
+)
+
+p2 <- love.plot(
+  bal.tab(
+    treat ~ v + factor(data_2$male) + age, 
+    data = data_2, 
+    weights = data_2$w,
+    method = "weighting"
+  )
+)
+
+p3 <- love.plot(
+  bal.tab(
+    treat ~ v + factor(data_3$male) + age, 
+    data = data_3, 
+    weights = data_3$w,
+    method = "weighting"
+  )
+)
+
+p1 / p2 / p3 + patchwork::plot_layout(guides = "collect")
+```
+
+## IPW: Exchangeability
+
+- Use package `EValue` to check echangeability.
+
+```{r}
+#| echo: true
+#| code-fold: true
+
+
+library(EValue)
+
+# evalue(coef())
+```
+
+
+## GEE model (Biased) {.smaller}
+
+- GEE model with no IP weighting
+- To account for the time-varying confounders we use an AR1 correlation structure
+
+```{r}
+#| echo: true
+#| code-fold: true
+
+gee.bias <- geeglm(d ~ treat + time + factor(male) + age + cluster(id),
+                    id = id,
+                    data = new_data, 
+                    family = gaussian("identity"), 
+                    corstr = "ar1")
+summary(gee.bias)
+```
+
+
+## GEE model (Weighted) {.smaller}
+
+- Building on the biased model we now give the model the stabilized weights
+
+```{r}
+#| echo: true
+#| code-fold: true
+
+
+gee.iptw <- geeglm(d ~ treat + time + factor(male) + age + cluster(id),
+                   id = id,
+                   data = new_data, 
+                   family = gaussian("identity"), 
+                   corstr = "ar1", 
+                   weights = w)
+summary(gee.iptw)
+```
+
+
+## MSM: Assumptions
+
+- Check for correct outcome model specification
+
+```{r}
+tibble(model_resid = residuals(gee.iptw)) |> 
+  mutate(index = 1:n()) |> 
+  ggplot(aes(x = index, y = model_resid)) + 
+  geom_point() +
+  geom_hline(aes(yintercept = 0), linetype = 2, color = "red")
+```
+
+
+## Model Comparison
+
+```{r}
+#| tbl-cap: "Effect of treatment on a continuous oucome"
+
+
+confint.geeglm <- function(object, parm, level = 0.95, ...) {
+  cc <- coef(summary(object))
+  mult <- qnorm((1+level)/2)
+  citab <- with(as.data.frame(cc),
+                cbind(lwr=Estimate-mult*Std.err,
+                      upr=Estimate+mult*Std.err))
+  rownames(citab) <- rownames(cc)
+  citab[parm,]
+}
+
+ci_1 <- confint.geeglm(gee.bias, level=0.95)
+ci_2 <- confint.geeglm(gee.iptw, level=0.95)
+
+tribble(
+  ~"Primary analysis", ~"Beta", ~"95% CI",
+  "Standard OLS model", round(coef(gee.bias)[2], 3), paste0(round(ci_1[2,1], 3), ",", round(ci_1[2,2], 3)),
+  "Marginal Structural GEE model", round(coef(gee.iptw)[2], 3), paste0(round(ci_2[2,1], 3), ",", round(ci_2[2,2], 3))
+) |> 
+gt::gt()
+```
+
+- In the standard GEE model, treatment increased outcome ($d$) by 0.012
+- Using the IP weighted MSM the treatment is found to decrease the outcome ($d$) by 0.134
+    - The 95\% confidence intervals show that only the MSM result is significant
+
+## Conclusions
+
+- IPTW fitted to a MSM results in a statistically significant outcome that would not have been identified with the standard OLS model
+- Fitting IPTW at each time point reduces the bias from prior treatment
+    - In conjunction with MSMs this can capture differences otherwise unidentified
+- 
+
+
+## Citations
+
+Redelmeier, Donald A., and Sheldon M. Singh. 2001. “Survival in Academy Award–Winning Actors and Actresses.” Annals of Internal Medicine 134 (10): 955–62. https://doi.org/10.7326/0003-4819-134-10-200105150-00009.
